@@ -1,0 +1,9 @@
+# サブフォルダも含めた .git フォルダを除外
+**/.git/
+
+# envファイルを除外
+.env
+
+# node_modules フォルダを除外
+node_modules/
+
