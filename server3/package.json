@@ -1,0 +1,23 @@
+{
+  "name": "server3",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts"
+  },
+  "dependencies": {
+    "@types/uuid": "^10.0.0",
+    "dotenv": "^16.4.7",
+    "hono": "^4.7.1",
+    "uuid": "^11.0.5"
+  },
+  "devDependencies": {
+    "@hono/node-server": "^1.13.8",
+    "@prisma/client": "^6.3.1",
+    "@prisma/extension-accelerate": "^1.2.2",
+    "@types/bun": "latest",
+    "svix": "^1.45.1"
+  },
+  "peerDependencies": {
+    "prisma": "^6.3.1",
+    "typescript": "^5.0.0"
+  }
+}

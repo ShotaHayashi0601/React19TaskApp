@@ -1,6 +1,6 @@
 import { HEADER_HEIGHT } from '@/constants';
 import { cn } from '@/lib/utils';
-import React from 'react';
+import TaskListWrapper from '@/features/task-list/components/TaskListWrapper';
 
 const TaskListPage = () => {
   return (
@@ -9,9 +9,9 @@ const TaskListPage = () => {
         minHeight: `calc(100vh - ${HEADER_HEIGHT}px)`,
         marginTop: HEADER_HEIGHT,
       }}
-      className={cn('w-full', 'bg-gray-100')}
+      className={cn('w-full', 'bg-gray-100 flex flex-col')}
     >
-      TaskList
+      <TaskListWrapper />
     </div>
   );
 };

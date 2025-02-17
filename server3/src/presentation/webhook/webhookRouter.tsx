@@ -1,15 +1,17 @@
 import { Hono } from 'hono';
 import { Webhook } from 'svix';
 import { HTTPException } from 'hono/http-exception';
+import * as dotenv from 'dotenv';
 
-interface Env {
-  SIGNING_SECRET: string;
-}
+import { UserRepository } from '../../infrastructure/repository/user/userRepository';
+import type { User } from '@prisma/client';
+import { RegisterUserUseCase } from '../../application/useCase/user/registerUserUseCase';
+dotenv.config();
+const registerUserUseCase = new RegisterUserUseCase(new UserRepository());
 
-const webhookRouter = new Hono<{ Bindings: Env }>();
+const webhookRouter = new Hono();
 webhookRouter.post('/', async (c) => {
-  const SIGNING_SECRET = c.env.SIGNING_SECRET;
-
+  const SIGNING_SECRET = process.env.SIGNING_SECRET;
   if (!SIGNING_SECRET) {
     console.error('シークレットが設定されていません');
     throw new HTTPException(500, {
@@ -45,12 +47,19 @@ webhookRouter.post('/', async (c) => {
   }
 
   const eventType = evt.type;
-  const { id } = evt.data;
+  const data = evt.data;
 
-  console.log(`Received webhook with ID ${id} and event type of ${eventType}`);
-  console.log('Webhook payload:', evt.data);
   if (eventType === 'user.created') {
-    console.log('userId:', eventType.id);
+    const user: User = {
+      id: data.id,
+      email: data.email_addresses[0].email_address,
+      name: `${data.first_name} ${data.last_name}`,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    console.log('eventType:', eventType);
+    console.log('user:', user);
+    await registerUserUseCase.register(user);
   }
 
   return c.json({ success: true, message: 'Webhookを受信しました' });

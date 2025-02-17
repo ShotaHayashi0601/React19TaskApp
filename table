@@ -1,0 +1,26 @@
+user の項目
+
+    id:string←uuidをふりたい
+    name:string
+    email:string
+
+task の項目
+　　 id:string←uuid をふりたい
+title:string
+description:string
+status:string
+expectedTime:number
+actualTime:number
+userId
+
+prisma を使用して、supabase にデータを保存したい。まずはテーブルの定義から
+作りたい。
+テーブルは、ユーザとユーザに紐づいたタスクを用意したい。
+タスクは日付、ユーザ、ステータス毎に表示、管理できるようにしたい。また
+ユーザと紐づくようにして、連動するようにしたい。例えばユーザが消されたときは
+タスクも消えるようにしたい。
+カラムに不足があったり、ベストプラクティスの観点から追加削除したほうが良ければ
+提案してほしい
+
+カラム名はパスカルケース、リトルキャメルケース、スネークケースなど適切な
+規則に直してほしい。
