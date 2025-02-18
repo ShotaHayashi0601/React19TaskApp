@@ -3,7 +3,7 @@ import Column from './column/Column';
 
 const Columns = () => {
   return (
-    <section className="flex justify-between gap-5 flex-1 py-3">
+    <section className="flex justify-between gap-5 flex-1 py-3 overflow-x-auto">
       <Column />
       <Column />
       <Column />
