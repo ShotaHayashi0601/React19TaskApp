@@ -12,7 +12,12 @@ const CustomModal = ({ children }: { children: React.ReactNode }) => {
       )}
       onClick={() => dispatch(closeModal())}
     >
-      {children}
+      <div
+        className="bg-white p-4 rounded-lg shadow-lg"
+        onClick={(e) => e.stopPropagation()} // クリックイベントを伝播させない
+      >
+        {children}
+      </div>
     </div>
   );
 };

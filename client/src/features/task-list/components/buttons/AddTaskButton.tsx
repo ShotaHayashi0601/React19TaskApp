@@ -5,12 +5,16 @@ import React, { FC } from 'react';
 interface AddTaskButtonProps {
   text: string;
   onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
 const AddTaskButton: FC<AddTaskButtonProps> = (props) => {
-  const { text, onClick } = props;
+  const { text, onClick, type = 'button', disabled = false } = props;
   return (
     <button
+      disabled={disabled}
+      type={type}
       onClick={onClick}
       className={cn(
         'py-1 px-4 flex items-center space-x-2',

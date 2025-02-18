@@ -30,13 +30,15 @@ model Task {
   status      TaskStatus @default(PENDING)
   expectedTime Int
   actualTime  Int?
-  dueDate     DateTime?
+  dueDate     String?
 
   userId     String
   user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt()
+
+  order     Int @default(0) 
 }
 
 enum TaskStatus {

@@ -6,4 +6,7 @@ export class TaskRepository {
   async create(task: Task): Promise<Task> {
     return await taskGateway.create(task);
   }
+  async findByUserId(userId: string): Promise<Task[]> {
+    return await taskGateway.findByUserId(userId);
+  }
 }

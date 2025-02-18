@@ -19,4 +19,5 @@ export type Task = {
   user?: User; // 関連するユーザーを含める場合、オプショナルにする
   createdAt: Date;
   updatedAt: Date;
+  order: number;
 };
