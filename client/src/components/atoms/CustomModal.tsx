@@ -1,16 +1,17 @@
-import { useDispatch } from 'react-redux';
-
-import { closeModal } from '@/redux/slices/ModalSlice';
 import { cn } from '@/lib/utils';
 
-const CustomModal = ({ children }: { children: React.ReactNode }) => {
-  const dispatch = useDispatch();
+interface CustomModalProps {
+  children: React.ReactNode;
+  setOpen: (isOpen: boolean) => void;
+}
+
+const CustomModal = ({ children, setOpen }: CustomModalProps) => {
   return (
     <div
       className={cn(
         'fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.1)]'
       )}
-      onClick={() => dispatch(closeModal())}
+      onClick={() => setOpen(false)}
     >
       <div
         className="bg-white p-4 rounded-lg shadow-lg"

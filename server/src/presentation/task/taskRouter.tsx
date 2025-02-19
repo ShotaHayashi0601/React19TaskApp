@@ -16,16 +16,18 @@ taskRouter.post('/', async (c) => {
       title: rowTask.title,
       description: rowTask.description,
       status: rowTask.status,
-      actualTime: rowTask.actualTime ?? null,
-      expectedTime: rowTask.expectedTime ?? null,
+      actualTime: parseInt(rowTask.actualTime),
+      expectedTime: parseInt(rowTask.expectedTime),
       createdAt: new Date(),
       updatedAt: new Date(),
-      dueDate: rowTask.dueDate ?? null,
-      order: rowTask.order,
+      dueDate: rowTask.dueDate,
+      order: parseInt(rowTask.order),
     };
+    console.log(task);
     const createdTask = await createTaskUseCase.create(task);
     return c.json({ success: true, data: createdTask });
   } catch (error) {
+    console.log(error);
     return c.json({ success: false, message: error }, 400);
   }
 });
@@ -33,7 +35,6 @@ taskRouter.get('/:userId', async (c) => {
   try {
     const userId = c.req.param('userId');
     const tasks = await getTaskUseCase.findByUserId(userId);
-    console.log(tasks);
     return c.json({ success: true, data: tasks });
   } catch (error) {
     return c.json({ success: false, message: error }, 400);

@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import modalReducer from './slices/ModalSlice';
+import taskReducer from './slices/TaskSlice';
 export const store = configureStore({
   reducer: {
-    modal: modalReducer,
+    modal: taskReducer,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

@@ -4,16 +4,20 @@ import { cn } from '@/lib/utils';
 import TaskList from './card/TaskList';
 import TaskHeader from './header/TaskHeader';
 import { FC, use } from 'react';
-import { TaskStatus } from '@/types';
+import { Task, TaskStatus } from '@/types';
+import { useDispatch } from 'react-redux';
+import { initializeTask } from '@/redux/slices/TaskSlice';
 
 interface ColumnProps {
-  fetch: Promise<unknown>;
+  fetch: Promise<Task[]>;
   status: TaskStatus;
+  withInit?: boolean;
 }
 
-const Column: FC<ColumnProps> = ({ fetch, status }) => {
+const Column: FC<ColumnProps> = ({ fetch, status, withInit = false }) => {
   const tasks = use(fetch);
-  console.log(tasks);
+  const dispatch = useDispatch();
+  if (withInit) dispatch(initializeTask(tasks));
   return (
     <div
       className={cn(

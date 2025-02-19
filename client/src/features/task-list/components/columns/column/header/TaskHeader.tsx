@@ -1,10 +1,7 @@
 import AddTaskButton from '../../../buttons/AddTaskButton';
 import { cn } from '@/lib/utils';
-import { RootState } from '@/redux/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { openModal } from '@/redux/slices/ModalSlice';
 import { TaskStatus } from '@/types';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import InputTaskForm from '../../../forms/InputTaskForm';
 import { formActions } from '@/types/form-action';
 
@@ -12,8 +9,7 @@ interface TaskHeaderProps {
   status: TaskStatus;
 }
 const TaskHeader: FC<TaskHeaderProps> = ({ status }) => {
-  const { isOpen } = useSelector((store: RootState) => store.modal);
-  const dispatch = useDispatch();
+  const [isOpen, setOpen] = useState(false);
 
   return (
     <>
@@ -26,9 +22,15 @@ const TaskHeader: FC<TaskHeaderProps> = ({ status }) => {
         <div className="bg-red-600 py-2 px-2 rounded-[.5rem]">
           <h2 className="md:text-[16px] text-white">未着手</h2>
         </div>
-        <AddTaskButton text={'追加'} onClick={() => dispatch(openModal())} />
+        <AddTaskButton text={'追加'} onClick={() => setOpen(true)} />
       </div>
-      {isOpen && <InputTaskForm status={status} action={formActions.ADD} />}
+      {isOpen && (
+        <InputTaskForm
+          setOpen={setOpen}
+          status={status}
+          action={formActions.ADD}
+        />
+      )}
     </>
   );
 };

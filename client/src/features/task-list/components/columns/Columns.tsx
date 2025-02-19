@@ -9,7 +9,6 @@ import { taskStatus } from '@/types';
 const Columns = () => {
   const user = useUser();
   if (!user?.user?.id) return null;
-  console.log(user.user.id);
   const fetch = getUserTasks(user.user.id);
 
   return (
@@ -27,7 +26,7 @@ const Columns = () => {
           </div>
         }
       >
-        <Column fetch={fetch} status={taskStatus.PENDING} />
+        <Column fetch={fetch} status={taskStatus.PENDING} withInit={true} />
       </Suspense>
       <Suspense
         fallback={

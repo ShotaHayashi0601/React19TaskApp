@@ -26,6 +26,7 @@ import AddTaskButton from '../buttons/AddTaskButton';
 import { TaskStatus } from '@/types';
 import { useUser } from '@clerk/clerk-react';
 import { FormAction } from '@/types/form-action';
+import { handleAdd, handleDelete, handleUpdate } from './taskAction';
 const defaultValues: TaskForm = {
   title: '',
   description: '',
@@ -34,25 +35,32 @@ const defaultValues: TaskForm = {
   actualTime: 0,
 };
 interface InputTaskFormProps {
-  status?: TaskStatus;
+  status: TaskStatus;
   action: FormAction;
+  setOpen: (value: boolean) => void;
 }
 
-const InputTaskForm: FC<InputTaskFormProps> = ({ status, action }) => {
+const InputTaskForm: FC<InputTaskFormProps> = ({ status, action, setOpen }) => {
   const form = useForm<TaskForm>({
     resolver: zodResolver(taskFormSchema),
     mode: 'onChange',
     defaultValues: { ...defaultValues },
   });
-
-  const [formState, formAction, isPending] = useActionState(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, formAction, isPending] = useActionState(
     async (prevState: TaskForm, formData: FormData) => {
-      const data = Object.fromEntries(formData.entries());
-
-      return {
-        ...prevState,
-        ...data,
+      const id = '';
+      const data = Object.fromEntries(
+        formData.entries()
+      ) as unknown as TaskForm;
+      const actionsHandlers: Record<FormAction, () => Promise<void>> = {
+        add: () => handleAdd(data, userId, status),
+        update: () => handleUpdate(id),
+        delete: () => handleDelete(id),
       };
+      await actionsHandlers[action]();
+      setOpen(false);
+      return { ...prevState, ...data };
     },
     { ...defaultValues }
   );
@@ -73,7 +81,7 @@ const InputTaskForm: FC<InputTaskFormProps> = ({ status, action }) => {
   };
 
   return (
-    <CustomModal>
+    <CustomModal setOpen={setOpen}>
       <div className="bg-white p-4 overflow-hidden w-[360px] lg:max-h-[500px] 2xl:max-h-[800px] overflow-y-auto">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
