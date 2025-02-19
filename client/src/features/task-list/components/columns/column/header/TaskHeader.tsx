@@ -3,9 +3,15 @@ import { cn } from '@/lib/utils';
 import { RootState } from '@/redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { openModal } from '@/redux/slices/ModalSlice';
-import AddTaskForm from '../../../forms/AddTaskForm';
+import { TaskStatus } from '@/types';
+import { FC } from 'react';
+import InputTaskForm from '../../../forms/InputTaskForm';
+import { formActions } from '@/types/form-action';
 
-const TaskHeader = () => {
+interface TaskHeaderProps {
+  status: TaskStatus;
+}
+const TaskHeader: FC<TaskHeaderProps> = ({ status }) => {
   const { isOpen } = useSelector((store: RootState) => store.modal);
   const dispatch = useDispatch();
 
@@ -22,7 +28,7 @@ const TaskHeader = () => {
         </div>
         <AddTaskButton text={'追加'} onClick={() => dispatch(openModal())} />
       </div>
-      {isOpen && <AddTaskForm />}
+      {isOpen && <InputTaskForm status={status} action={formActions.ADD} />}
     </>
   );
 };

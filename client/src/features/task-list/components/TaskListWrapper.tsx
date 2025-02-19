@@ -1,4 +1,3 @@
-'use client';
 import Columns from './columns/Columns';
 import Controller from './controllers/Controller';
 

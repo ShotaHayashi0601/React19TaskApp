@@ -3,8 +3,17 @@
 import { cn } from '@/lib/utils';
 import TaskList from './card/TaskList';
 import TaskHeader from './header/TaskHeader';
+import { FC, use } from 'react';
+import { TaskStatus } from '@/types';
 
-const Column = () => {
+interface ColumnProps {
+  fetch: Promise<unknown>;
+  status: TaskStatus;
+}
+
+const Column: FC<ColumnProps> = ({ fetch, status }) => {
+  const tasks = use(fetch);
+  console.log(tasks);
   return (
     <div
       className={cn(
@@ -13,7 +22,7 @@ const Column = () => {
         'rounded-md bg-slate-600 flex flex-1 flex-col overflow-auto max-h-[calc(100vh-144px)]'
       )}
     >
-      <TaskHeader />
+      <TaskHeader status={status} />
       <TaskList />
     </div>
   );

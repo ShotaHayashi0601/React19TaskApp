@@ -33,6 +33,7 @@ taskRouter.get('/:userId', async (c) => {
   try {
     const userId = c.req.param('userId');
     const tasks = await getTaskUseCase.findByUserId(userId);
+    console.log(tasks);
     return c.json({ success: true, data: tasks });
   } catch (error) {
     return c.json({ success: false, message: error }, 400);

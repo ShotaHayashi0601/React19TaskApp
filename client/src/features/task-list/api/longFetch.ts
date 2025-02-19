@@ -1,4 +1,7 @@
-export async function longFetch() {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-  return 'long fetch done';
+export function fetchData() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('Fetched data');
+    }, 2000);
+  });
 }

@@ -1,6 +1,6 @@
 import CustomModal from '@/components/atoms/CustomModal';
 import { TaskForm, taskFormSchema } from '@/lib/schemas/taskFormSchema';
-import React, { startTransition, useActionState } from 'react';
+import React, { FC, startTransition, useActionState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
@@ -21,9 +21,11 @@ import {
 } from '@/components/ui/popover';
 import { Icons } from '@/constants/icons';
 import { Calendar } from '@/components/ui/calendar';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import AddTaskButton from '../buttons/AddTaskButton';
+import { TaskStatus } from '@/types';
+import { useUser } from '@clerk/clerk-react';
+import { FormAction } from '@/types/form-action';
 const defaultValues: TaskForm = {
   title: '',
   description: '',
@@ -31,7 +33,12 @@ const defaultValues: TaskForm = {
   expectedTime: 0,
   actualTime: 0,
 };
-const AddTaskForm = () => {
+interface InputTaskFormProps {
+  status?: TaskStatus;
+  action: FormAction;
+}
+
+const InputTaskForm: FC<InputTaskFormProps> = ({ status, action }) => {
   const form = useForm<TaskForm>({
     resolver: zodResolver(taskFormSchema),
     mode: 'onChange',
@@ -42,7 +49,6 @@ const AddTaskForm = () => {
     async (prevState: TaskForm, formData: FormData) => {
       const data = Object.fromEntries(formData.entries());
 
-      console.log('フォームデータ:', data);
       return {
         ...prevState,
         ...data,
@@ -50,6 +56,9 @@ const AddTaskForm = () => {
     },
     { ...defaultValues }
   );
+  const user = useUser();
+  if (!user?.user?.id) return null;
+  const userId = user.user.id;
 
   const onSubmit: SubmitHandler<TaskForm> = (data) => {
     const formData = new FormData();
@@ -201,4 +210,4 @@ const AddTaskForm = () => {
   );
 };
 
-export default AddTaskForm;
+export default InputTaskForm;
