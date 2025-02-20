@@ -64,6 +64,7 @@ function getInitialValues(action: FormAction, task?: Task): TaskForm {
     };
   }
 }
+
 const InputTaskForm: FC<InputTaskFormProps> = ({
   status,
   action,
