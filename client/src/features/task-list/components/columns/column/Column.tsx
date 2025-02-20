@@ -5,19 +5,16 @@ import TaskList from './card/TaskList';
 import TaskHeader from './header/TaskHeader';
 import { FC, use } from 'react';
 import { Task, TaskStatus } from '@/types';
-import { useDispatch } from 'react-redux';
-import { initializeTask } from '@/redux/slices/TaskSlice';
 
 interface ColumnProps {
-  fetch: Promise<Task[]>;
+  fetchForSkeleton: Promise<Task[]>;
   status: TaskStatus;
-  withInit?: boolean;
+  tasks: Task[];
 }
 
-const Column: FC<ColumnProps> = ({ fetch, status, withInit = false }) => {
-  const tasks = use(fetch);
-  const dispatch = useDispatch();
-  if (withInit) dispatch(initializeTask(tasks));
+const Column: FC<ColumnProps> = ({ fetchForSkeleton, status, tasks }) => {
+  use(fetchForSkeleton);
+  const filteredTasks = tasks.filter((task) => task.status === status);
   return (
     <div
       className={cn(
@@ -27,7 +24,7 @@ const Column: FC<ColumnProps> = ({ fetch, status, withInit = false }) => {
       )}
     >
       <TaskHeader status={status} />
-      <TaskList />
+      <TaskList tasks={filteredTasks} />
     </div>
   );
 };

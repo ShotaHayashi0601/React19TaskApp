@@ -1,8 +1,29 @@
 import { Card, CardDescription } from '@/components/ui/card';
 import { Icons } from '@/constants/icons';
-
 import { cn } from '@/lib/utils';
-const TaskCard = () => {
+import { Task, taskStatus, TaskStatus } from '@/types';
+import { FC } from 'react';
+
+interface TaskCardInterface {
+  task: Task;
+}
+
+const markerColor = (status: TaskStatus): string => {
+  switch (status) {
+    case taskStatus.PENDING:
+      return '#f58787';
+    case taskStatus.IN_PROGRESS:
+      return '#1E90FF';
+    case taskStatus.COMPLETED:
+      return '#32CD32';
+    default: {
+      const exhaustiveCheck: never = status;
+      throw new Error(`Unhandled status case: ${exhaustiveCheck}`);
+    }
+  }
+};
+
+const TaskCard: FC<TaskCardInterface> = ({ task }) => {
   return (
     <Card
       className={cn(
@@ -20,20 +41,26 @@ const TaskCard = () => {
           <h2
             className="relative inline-block font-semibold bg-no-repeat "
             style={{
-              backgroundImage:
-                'linear-gradient(to bottom, transparent 60%, #facc15 60%)',
+              backgroundImage: `linear-gradient(to bottom, transparent 60%, ${markerColor(
+                task.status
+              )} 60%)`,
             }}
           >
-            プログラミング
+            {task.title}
           </h2>
         </header>
         <main className="flex flex-col flex-1">
           <CardDescription className="text-sm flex-1">
-            Udemy講座：React入門
+            {task.description}
           </CardDescription>
-          <section className="text-sm flex items-center space-x-4">
-            <div>予定:120分</div>
-            <div>実績:120分</div>
+          <section className="text-sm flex items-center justify-between">
+            <div className="flex space-x-4 items-center">
+              <div>予定:{task.expectedTime}分</div>
+              <div>実績:{task.actualTime}分</div>
+            </div>
+            <div>
+              <div>期限:{task.dueDate}</div>
+            </div>
           </section>
         </main>
       </div>

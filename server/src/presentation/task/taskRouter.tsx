@@ -23,11 +23,9 @@ taskRouter.post('/', async (c) => {
       dueDate: rowTask.dueDate,
       order: parseInt(rowTask.order),
     };
-    console.log(task);
     const createdTask = await createTaskUseCase.create(task);
     return c.json({ success: true, data: createdTask });
   } catch (error) {
-    console.log(error);
     return c.json({ success: false, message: error }, 400);
   }
 });
@@ -35,6 +33,7 @@ taskRouter.get('/:userId', async (c) => {
   try {
     const userId = c.req.param('userId');
     const tasks = await getTaskUseCase.findByUserId(userId);
+    console.log(tasks);
     return c.json({ success: true, data: tasks });
   } catch (error) {
     return c.json({ success: false, message: error }, 400);

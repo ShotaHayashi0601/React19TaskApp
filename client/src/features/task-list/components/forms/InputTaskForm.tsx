@@ -23,10 +23,12 @@ import { Icons } from '@/constants/icons';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import AddTaskButton from '../buttons/AddTaskButton';
-import { TaskStatus } from '@/types';
+import { Task, TaskStatus } from '@/types';
 import { useUser } from '@clerk/clerk-react';
 import { FormAction } from '@/types/form-action';
 import { handleAdd, handleDelete, handleUpdate } from './taskAction';
+import { useSelector } from 'react-redux';
+import { TaskState } from '@/redux/slices/TaskSlice';
 const defaultValues: TaskForm = {
   title: '',
   description: '',
@@ -46,6 +48,8 @@ const InputTaskForm: FC<InputTaskFormProps> = ({ status, action, setOpen }) => {
     mode: 'onChange',
     defaultValues: { ...defaultValues },
   });
+  const tasks = useSelector<TaskState, Task[]>((state) => state.taskList);
+  console.log(tasks);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, formAction, isPending] = useActionState(
     async (prevState: TaskForm, formData: FormData) => {

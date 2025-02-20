@@ -17,7 +17,7 @@ model User {
   id       String @id @default(uuid())
   name     String
   email    String @unique
-  tasks    Task[]
+  tasks    Task[] @relation("UserTasks")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
@@ -33,7 +33,7 @@ model Task {
   dueDate     String?
 
   userId     String
-  user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User @relation("UserTasks",fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt()

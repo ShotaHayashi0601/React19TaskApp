@@ -1,6 +1,6 @@
 import AddTaskButton from '../../../buttons/AddTaskButton';
 import { cn } from '@/lib/utils';
-import { TaskStatus } from '@/types';
+import { taskStatus, TaskStatus } from '@/types';
 import { FC, useState } from 'react';
 import InputTaskForm from '../../../forms/InputTaskForm';
 import { formActions } from '@/types/form-action';
@@ -8,6 +8,20 @@ import { formActions } from '@/types/form-action';
 interface TaskHeaderProps {
   status: TaskStatus;
 }
+const bgColor = (status: TaskStatus): string => {
+  switch (status) {
+    case taskStatus.PENDING:
+      return 'bg-taskStatus-background-pending-main';
+    case taskStatus.IN_PROGRESS:
+      return 'bg-taskStatus-background-progress-main';
+    case taskStatus.COMPLETED:
+      return 'bg-taskStatus-background-completed-main';
+    default: {
+      const exhaustiveCheck: never = status;
+      throw new Error(`Unhandled status case: ${exhaustiveCheck}`);
+    }
+  }
+};
 const TaskHeader: FC<TaskHeaderProps> = ({ status }) => {
   const [isOpen, setOpen] = useState(false);
 
@@ -19,7 +33,7 @@ const TaskHeader: FC<TaskHeaderProps> = ({ status }) => {
           'w-full px-4 py-2 bg-gray-50 flex justify-between items-center'
         )}
       >
-        <div className="bg-red-600 py-2 px-2 rounded-[.5rem]">
+        <div className={`${bgColor(status)} py-2 px-2 rounded-[.5rem]`}>
           <h2 className="md:text-[16px] text-white">未着手</h2>
         </div>
         <AddTaskButton text={'追加'} onClick={() => setOpen(true)} />

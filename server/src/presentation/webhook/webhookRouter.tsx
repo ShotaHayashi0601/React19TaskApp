@@ -57,8 +57,6 @@ webhookRouter.post('/', async (c) => {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    console.log('eventType:', eventType);
-    console.log('user:', user);
     await registerUserUseCase.register(user);
   }
 

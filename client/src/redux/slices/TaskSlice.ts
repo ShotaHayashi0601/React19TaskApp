@@ -1,13 +1,26 @@
+import { getUserTasks } from '@/features/task-list/api/getUserTasks';
 import { Task } from '@/types';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface TaskState {
+export interface TaskState {
   taskList: Task[];
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: TaskState = {
   taskList: [],
+  loading: false,
+  error: null,
 };
+
+export const fetchTasks = createAsyncThunk(
+  'task/fetchTasks',
+  async (userId: string) => {
+    const tasks = await getUserTasks(userId);
+    return tasks;
+  }
+);
 
 const taskSlice = createSlice({
   name: 'task',
@@ -32,6 +45,21 @@ const taskSlice = createSlice({
         state.taskList[index] = action.payload;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTasks.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTasks.fulfilled, (state, action: PayloadAction<Task[]>) => {
+        state.taskList = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchTasks.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'タスクの取得に失敗しました';
+      });
   },
 });
 

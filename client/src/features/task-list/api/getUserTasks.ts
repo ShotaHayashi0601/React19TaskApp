@@ -11,8 +11,9 @@ export const getUserTasks = async (userId: string) => {
     if (!response.ok) {
       throw new Error('タスクの取得に失敗しました');
     }
-    const tasks: Task[] = await response.json();
-    return tasks;
+    const { data }: { data: Task[] } = await response.json();
+
+    return data;
   } catch (e) {
     console.error('Error fetching tasks:', e);
     throw e;

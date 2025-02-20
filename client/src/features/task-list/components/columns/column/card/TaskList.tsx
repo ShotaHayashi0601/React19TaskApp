@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { FC } from 'react';
 import TaskCard from './TaskCard';
+import { Task } from '@/types';
 
-const TaskList = () => {
+interface TaskListProps {
+  tasks: Task[];
+}
+
+const TaskList: FC<TaskListProps> = ({ tasks }) => {
   return (
     <div className="flex flex-wrap px-2 py-2 gap-2 justify-between">
-      <TaskCard />
-      <TaskCard />
-      <TaskCard />
-      <TaskCard />
-      <TaskCard />
-      <TaskCard />
-      <TaskCard />
+      {tasks.map((task) => (
+        <TaskCard key={task.id} task={task} />
+      ))}
     </div>
   );
 };

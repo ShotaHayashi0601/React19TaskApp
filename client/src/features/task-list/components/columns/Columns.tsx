@@ -1,15 +1,28 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import Column from './column/Column';
 import CardSkeleton from '@/components/atoms/CardSkeleton';
 import { cn } from '@/lib/utils';
-import { getUserTasks } from '../../api/getUserTasks';
 import { useUser } from '@clerk/clerk-react';
-import { taskStatus } from '@/types';
+import { fetchTasks, TaskState } from '@/redux/slices/TaskSlice';
 
+import { Task, TaskStatus, taskStatus } from '@/types';
+import { getUserTasks } from '../../api/getUserTasks';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 const Columns = () => {
-  const user = useUser();
-  if (!user?.user?.id) return null;
-  const fetch = getUserTasks(user.user.id);
+  const { user } = useUser();
+  const dispatch = useDispatch();
+  const { taskList: tasks } = useSelector<TaskState>(
+    (state) => state.task.taskList
+  );
+  useEffect(() => {
+    if (user?.id) {
+      dispatch(fetchTasks(user.id));
+    }
+  }, [user, dispatch]);
+  if (!user?.id) return null;
+  //for Skeleton
+  const fetchTasksForSkeleton = getUserTasks(user.id);
 
   return (
     <section className="flex justify-between gap-5 flex-1 py-3 overflow-x-auto">
@@ -26,7 +39,11 @@ const Columns = () => {
           </div>
         }
       >
-        <Column fetch={fetch} status={taskStatus.PENDING} withInit={true} />
+        <Column
+          fetchForSkeleton={fetchTasksForSkeleton}
+          status={taskStatus.PENDING}
+          tasks={tasks}
+        />
       </Suspense>
       <Suspense
         fallback={
@@ -41,7 +58,11 @@ const Columns = () => {
           </div>
         }
       >
-        <Column fetch={fetch} status={taskStatus.IN_PROGRESS} />
+        <Column
+          fetchForSkeleton={fetchTasksForSkeleton}
+          status={taskStatus.IN_PROGRESS}
+          tasks={tasks}
+        />
       </Suspense>
       <Suspense
         fallback={
@@ -56,7 +77,11 @@ const Columns = () => {
           </div>
         }
       >
-        <Column fetch={fetch} status={taskStatus.COMPLETED} />
+        <Column
+          fetchForSkeleton={fetchTasksForSkeleton}
+          status={taskStatus.COMPLETED}
+          tasks={tasks}
+        />
       </Suspense>
     </section>
   );

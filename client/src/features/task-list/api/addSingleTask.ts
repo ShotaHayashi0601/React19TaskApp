@@ -22,7 +22,6 @@ export const addSingleTask = async (
       dueDate: formatDate(task.dueDate),
       order: 1, //todo: orderの値をどうするか
     };
-    console.log(addTask);
     await fetch(`${API_BASE_URL}/tasks`, {
       method: 'POST',
       headers: {
