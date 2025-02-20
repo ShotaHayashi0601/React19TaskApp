@@ -23,33 +23,63 @@ import { Icons } from '@/constants/icons';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import AddTaskButton from '../buttons/AddTaskButton';
-import { Task, TaskStatus } from '@/types';
+import { Task, taskStatus, TaskStatus } from '@/types';
 import { useUser } from '@clerk/clerk-react';
-import { FormAction } from '@/types/form-action';
-import { handleAdd, handleDelete, handleUpdate } from './taskAction';
-import { useSelector } from 'react-redux';
-import { TaskState } from '@/redux/slices/TaskSlice';
-const defaultValues: TaskForm = {
-  title: '',
-  description: '',
-  dueDate: new Date(),
-  expectedTime: 0,
-  actualTime: 0,
-};
+import { FormAction, formActions } from '@/types/form-action';
+import {
+  handleAdd,
+  handleDelete,
+  handleUpdate,
+} from '../../services/taskAction';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+
 interface InputTaskFormProps {
   status: TaskStatus;
   action: FormAction;
   setOpen: (value: boolean) => void;
+  setOptimisticTasks: (tasks: Task[]) => void;
+  task?: Task;
 }
 
-const InputTaskForm: FC<InputTaskFormProps> = ({ status, action, setOpen }) => {
+function getInitialValues(action: FormAction, task?: Task): TaskForm {
+  if (action === formActions.UPDATE && task) {
+    return {
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      dueDate: new Date(task.dueDate ?? ''),
+      expectedTime: task.expectedTime,
+      actualTime: task.actualTime ?? 0,
+      status: task.status,
+    };
+  } else {
+    return {
+      id: '',
+      title: '',
+      description: '',
+      dueDate: new Date(),
+      expectedTime: 0,
+      actualTime: 0,
+      status: taskStatus.PENDING,
+    };
+  }
+}
+const InputTaskForm: FC<InputTaskFormProps> = ({
+  status,
+  action,
+  setOpen,
+  setOptimisticTasks,
+  task,
+}) => {
+  const defaultValues = getInitialValues(action, task);
   const form = useForm<TaskForm>({
     resolver: zodResolver(taskFormSchema),
     mode: 'onChange',
-    defaultValues: { ...defaultValues },
+    defaultValues,
   });
-  const tasks = useSelector<TaskState, Task[]>((state) => state.taskList);
-  console.log(tasks);
+  const tasks = useAppSelector((state) => state.task.taskList);
+
+  const dispatch = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, formAction, isPending] = useActionState(
     async (prevState: TaskForm, formData: FormData) => {
@@ -58,15 +88,24 @@ const InputTaskForm: FC<InputTaskFormProps> = ({ status, action, setOpen }) => {
         formData.entries()
       ) as unknown as TaskForm;
       const actionsHandlers: Record<FormAction, () => Promise<void>> = {
-        add: () => handleAdd(data, userId, status),
-        update: () => handleUpdate(id),
+        add: () =>
+          handleAdd(data, userId, status, tasks, dispatch, setOptimisticTasks),
+        update: () =>
+          handleUpdate(
+            data,
+            userId,
+            status,
+            tasks,
+            dispatch,
+            setOptimisticTasks
+          ),
         delete: () => handleDelete(id),
       };
-      await actionsHandlers[action]();
       setOpen(false);
+      await actionsHandlers[action]();
       return { ...prevState, ...data };
     },
-    { ...defaultValues }
+    defaultValues
   );
   const user = useUser();
   if (!user?.user?.id) return null;

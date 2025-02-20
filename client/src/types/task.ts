@@ -17,8 +17,8 @@ export type Task = {
   dueDate?: string;
   userId: string;
   user?: User; // 関連するユーザーを含める場合、オプショナルにする
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string;
+  updatedAt: Date | string;
   order: number;
 };
 

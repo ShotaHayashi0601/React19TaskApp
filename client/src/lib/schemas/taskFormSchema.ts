@@ -1,18 +1,25 @@
+import { taskStatus } from '@/types';
 import { z } from 'zod';
 
 export const taskFormSchema = z.object({
+  id: z.string(),
   title: z
     .string({
       required_error: '必須です',
       invalid_type_error: '文字列を入力してください',
     })
     .min(2, { message: '2文字以上入力してください' })
-    .max(100, { message: '20文字以内にしてください' }),
+    .max(20, { message: '20文字以内にしてください' }),
   description: z
     .string()
-    .max(50, { message: '50文字以内にしてください' })
+    .max(40, { message: '40文字以内にしてください' })
     .optional(),
   dueDate: z.date(),
+  status: z.enum([
+    taskStatus.PENDING,
+    taskStatus.IN_PROGRESS,
+    taskStatus.COMPLETED,
+  ]),
   expectedTime: z
     .number({
       required_error: '必須です',

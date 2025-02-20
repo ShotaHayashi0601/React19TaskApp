@@ -1,12 +1,13 @@
 import AddTaskButton from '../../../buttons/AddTaskButton';
 import { cn } from '@/lib/utils';
-import { taskStatus, TaskStatus } from '@/types';
+import { Task, taskStatus, TaskStatus } from '@/types';
 import { FC, useState } from 'react';
 import InputTaskForm from '../../../forms/InputTaskForm';
 import { formActions } from '@/types/form-action';
 
 interface TaskHeaderProps {
   status: TaskStatus;
+  setOptimisticTasks: (tasks: Task[]) => void;
 }
 const bgColor = (status: TaskStatus): string => {
   switch (status) {
@@ -22,7 +23,7 @@ const bgColor = (status: TaskStatus): string => {
     }
   }
 };
-const TaskHeader: FC<TaskHeaderProps> = ({ status }) => {
+const TaskHeader: FC<TaskHeaderProps> = ({ status, setOptimisticTasks }) => {
   const [isOpen, setOpen] = useState(false);
 
   return (
@@ -43,6 +44,7 @@ const TaskHeader: FC<TaskHeaderProps> = ({ status }) => {
           setOpen={setOpen}
           status={status}
           action={formActions.ADD}
+          setOptimisticTasks={setOptimisticTasks}
         />
       )}
     </>

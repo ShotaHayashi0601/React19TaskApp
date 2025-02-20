@@ -2,10 +2,10 @@ import { Task } from '@/types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const getUserTasks = async (userId: string) => {
+export const getUserTasks = async (userId: string | undefined) => {
   try {
     if (!userId) {
-      throw new Error('ユーザーIDが必要です');
+      return [];
     }
     const response = await fetch(`${API_BASE_URL}/tasks/${userId}`);
     if (!response.ok) {

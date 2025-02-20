@@ -1,28 +1,34 @@
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useMemo, useOptimistic } from 'react';
 import Column from './column/Column';
 import CardSkeleton from '@/components/atoms/CardSkeleton';
 import { cn } from '@/lib/utils';
 import { useUser } from '@clerk/clerk-react';
-import { fetchTasks, TaskState } from '@/redux/slices/TaskSlice';
+import { fetchTasks } from '@/redux/slices/TaskSlice';
 
-import { Task, TaskStatus, taskStatus } from '@/types';
+import { taskStatus } from '@/types';
 import { getUserTasks } from '../../api/getUserTasks';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+
 const Columns = () => {
   const { user } = useUser();
-  const dispatch = useDispatch();
-  const { taskList: tasks } = useSelector<TaskState>(
-    (state) => state.task.taskList
-  );
+  const dispatch = useAppDispatch();
+  const { taskList: tasks } = useAppSelector((state) => state.task);
+  const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks);
+  console.log(tasks, optimisticTasks);
   useEffect(() => {
     if (user?.id) {
       dispatch(fetchTasks(user.id));
     }
   }, [user, dispatch]);
-  if (!user?.id) return null;
   //for Skeleton
-  const fetchTasksForSkeleton = getUserTasks(user.id);
+  // const fetchTasksForSkeleton = useCallback(async () => {
+  //   if (!user?.id) return [];
+  //   return await getUserTasks(user.id);
+  // }, [user?.id]);
+  const fetchTasksForSkeleton = useMemo(() => {
+    return getUserTasks(user?.id);
+  }, []);
+  if (!user?.id) return null;
 
   return (
     <section className="flex justify-between gap-5 flex-1 py-3 overflow-x-auto">
@@ -42,7 +48,8 @@ const Columns = () => {
         <Column
           fetchForSkeleton={fetchTasksForSkeleton}
           status={taskStatus.PENDING}
-          tasks={tasks}
+          optimisticTasks={optimisticTasks}
+          setOptimisticTasks={setOptimisticTasks}
         />
       </Suspense>
       <Suspense
@@ -61,7 +68,8 @@ const Columns = () => {
         <Column
           fetchForSkeleton={fetchTasksForSkeleton}
           status={taskStatus.IN_PROGRESS}
-          tasks={tasks}
+          optimisticTasks={optimisticTasks}
+          setOptimisticTasks={setOptimisticTasks}
         />
       </Suspense>
       <Suspense
@@ -80,7 +88,8 @@ const Columns = () => {
         <Column
           fetchForSkeleton={fetchTasksForSkeleton}
           status={taskStatus.COMPLETED}
-          tasks={tasks}
+          optimisticTasks={optimisticTasks}
+          setOptimisticTasks={setOptimisticTasks}
         />
       </Suspense>
     </section>

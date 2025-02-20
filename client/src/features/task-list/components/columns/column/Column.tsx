@@ -9,12 +9,20 @@ import { Task, TaskStatus } from '@/types';
 interface ColumnProps {
   fetchForSkeleton: Promise<Task[]>;
   status: TaskStatus;
-  tasks: Task[];
+  optimisticTasks: Task[];
+  setOptimisticTasks: (tasks: Task[]) => void;
 }
 
-const Column: FC<ColumnProps> = ({ fetchForSkeleton, status, tasks }) => {
+const Column: FC<ColumnProps> = ({
+  fetchForSkeleton,
+  status,
+  optimisticTasks,
+  setOptimisticTasks,
+}) => {
   use(fetchForSkeleton);
-  const filteredTasks = tasks.filter((task) => task.status === status);
+  const filteredTasks = optimisticTasks.filter(
+    (task) => task.status === status
+  );
   return (
     <div
       className={cn(
@@ -23,8 +31,8 @@ const Column: FC<ColumnProps> = ({ fetchForSkeleton, status, tasks }) => {
         'rounded-md bg-slate-600 flex flex-1 flex-col overflow-auto max-h-[calc(100vh-144px)]'
       )}
     >
-      <TaskHeader status={status} />
-      <TaskList tasks={filteredTasks} />
+      <TaskHeader status={status} setOptimisticTasks={setOptimisticTasks} />
+      <TaskList tasks={filteredTasks} setOptimisticTasks={setOptimisticTasks} />
     </div>
   );
 };
