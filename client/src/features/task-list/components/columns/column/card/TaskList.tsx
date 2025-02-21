@@ -12,6 +12,7 @@ const TaskList: FC<TaskListProps> = ({ tasks, setOptimisticTasks }) => {
     <div className="flex flex-wrap px-2 py-2 gap-2 justify-between">
       {tasks.map((task) => (
         <TaskCard
+          tasks={tasks}
           key={task.id}
           task={task}
           setOptimisticTasks={setOptimisticTasks}

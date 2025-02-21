@@ -6,9 +6,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { GetTaskUseCase } from '../../application/useCase/task/getTaskUseCase';
 import { formatDateTime } from '../../utils/formatting';
 import { UpdateTaskUseCase } from '../../application/useCase/task/updateTaskUseCase';
+import { DeleteTaskUseCase } from '../../application/useCase/task/deleteTaskUseCase';
 const taskRouter = new Hono();
 const createTaskUseCase = new CreateTaskUseCase(new TaskRepository());
 const updateTaskUseCase = new UpdateTaskUseCase(new TaskRepository());
+const deleteTaskUseCase = new DeleteTaskUseCase(new TaskRepository());
 const getTaskUseCase = new GetTaskUseCase(new TaskRepository());
 taskRouter.post('/', async (c) => {
   try {
@@ -67,6 +69,15 @@ taskRouter.get('/:userId', async (c) => {
     });
 
     return c.json({ success: true, data: taskList });
+  } catch (error) {
+    return c.json({ success: false, message: error }, 400);
+  }
+});
+taskRouter.delete('/:taskId', async (c) => {
+  try {
+    const taskId = c.req.param('taskId');
+    await deleteTaskUseCase.deleteOne(taskId);
+    return c.json({ success: true });
   } catch (error) {
     return c.json({ success: false, message: error }, 400);
   }

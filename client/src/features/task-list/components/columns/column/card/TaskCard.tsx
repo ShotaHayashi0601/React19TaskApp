@@ -1,15 +1,19 @@
 import { Card, CardDescription } from '@/components/ui/card';
 import { Icons } from '@/constants/icons';
 import { cn } from '@/lib/utils';
-import { Task, taskStatus, TaskStatus } from '@/types';
-import { FC, useState } from 'react';
+import { Task, TaskStatus } from '@/types';
+import { FC, startTransition, useState } from 'react';
 import InputTaskForm from '../../../forms/InputTaskForm';
 import { formActions } from '@/types/form-action';
 import { isOverDate } from '@/utils';
 import CommonConfirm from '@/components/molecules/CommonConfirm';
+import { taskStatus } from '@/constants/task-status';
+import { handleDelete } from '@/features/task-list/services/taskAction';
+import { useAppDispatch } from '@/redux/hooks';
 
 interface TaskCardInterface {
   task: Task;
+  tasks: Task[];
   setOptimisticTasks: (tasks: Task[]) => void;
 }
 
@@ -22,7 +26,7 @@ function markerColor(status: TaskStatus): string {
     case taskStatus.COMPLETED:
       return '#32CD32';
     default: {
-      const exhaustiveCheck: never = status;
+      const exhaustiveCheck: never = status as never;
       throw new Error(`Unhandled status case: ${exhaustiveCheck}`);
     }
   }
@@ -31,10 +35,20 @@ function getIsDelayAlert(dueDate: string, status: TaskStatus): boolean {
   return status !== taskStatus.COMPLETED && isOverDate(dueDate);
 }
 
-const TaskCard: FC<TaskCardInterface> = ({ task, setOptimisticTasks }) => {
+const TaskCard: FC<TaskCardInterface> = ({
+  task,
+  tasks,
+  setOptimisticTasks,
+}) => {
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const isDelayAlert = getIsDelayAlert(task.dueDate ?? '', task.status);
+  const dispatch = useAppDispatch();
+  const handleDeleteTask = async () => {
+    startTransition(async () => {
+      await handleDelete(task.id, tasks, dispatch, setOptimisticTasks);
+    });
+  };
   return (
     <>
       <Card
@@ -44,10 +58,8 @@ const TaskCard: FC<TaskCardInterface> = ({ task, setOptimisticTasks }) => {
           'rounded-sm',
           'backdrop-blur-sm',
           'p-2 pb-1 cursor-move',
-          'transition-transform duration-300 hover:scale-105', // ズーム効果
-          isDelayAlert
-            ? 'bg-pink-100' // ✅ 未完了タスクはアニメーション
-            : 'bg-white'
+          'transition-transform duration-300 hover:scale-105',
+          isDelayAlert ? 'bg-pink-100' : 'bg-white'
         )}
       >
         <div className="flex flex-1 space-x-2">
@@ -120,9 +132,11 @@ const TaskCard: FC<TaskCardInterface> = ({ task, setOptimisticTasks }) => {
       {isDeleteOpen && (
         <CommonConfirm
           setOpen={setIsDeleteOpen}
-          func={undefined}
+          func={handleDeleteTask}
           title={'確認'}
-          message={['本当に削除しますか？']}
+          message={['削除しますか？']}
+          cancelText="いいえ"
+          executeText="はい"
         />
       )}
     </>

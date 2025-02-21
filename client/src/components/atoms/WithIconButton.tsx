@@ -6,7 +6,7 @@ interface WithIconButtonProps {
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
-  icon: ElementType;
+  icon?: ElementType;
 }
 
 const WithIconButton: FC<WithIconButtonProps> = (props) => {
@@ -31,9 +31,11 @@ const WithIconButton: FC<WithIconButtonProps> = (props) => {
         'active:scale-95'
       )}
     >
-      <div>
-        <Icon className="w-6 h-6 font-bold" />
-      </div>
+      {Icon && (
+        <div>
+          <Icon className="w-6 h-6 font-bold" />
+        </div>
+      )}
       <div>{text}</div>
     </button>
   );

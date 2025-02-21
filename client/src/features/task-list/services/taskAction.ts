@@ -2,10 +2,12 @@ import { TaskForm } from '@/lib/schemas/taskFormSchema';
 import { Task, TaskStatus } from '@/types';
 import { addSingleTask } from '../api/addSingleTask';
 import { AppDispatch } from '@/redux/store';
-import { addTask, updateTask } from '@/redux/slices/TaskSlice';
+import { addTask, deleteTask, updateTask } from '@/redux/slices/TaskSlice';
 import { formatDate, formatDateTime } from '@/utils';
 import { v4 as uuidv4 } from 'uuid';
 import { updateSingleTask } from '../api/updateSingleTask';
+import { deleteSingleTask } from '../api/addSingleTask copy';
+
 export const handleAdd = async (
   data: TaskForm,
   userId: string,
@@ -32,6 +34,7 @@ export const handleAdd = async (
   await addSingleTask(newTask);
   dispatch(addTask(newTask));
 };
+
 export const handleUpdate = async (
   data: TaskForm,
   userId: string,
@@ -56,8 +59,17 @@ export const handleUpdate = async (
   setOptimisticTasks(
     tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
   );
-  console.log(updatedTask);
   await updateSingleTask(updatedTask);
   dispatch(updateTask(updatedTask));
 };
-export const handleDelete = async (id: string) => {};
+
+export const handleDelete = async (
+  id: string,
+  tasks: Task[],
+  dispatch: AppDispatch,
+  setOptimisticTasks: (tasks: Task[]) => void
+) => {
+  setOptimisticTasks(tasks.filter((task) => task.id !== id));
+  await deleteSingleTask(id);
+  dispatch(deleteTask(id));
+};

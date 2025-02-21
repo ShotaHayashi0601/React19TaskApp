@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils';
 import { useUser } from '@clerk/clerk-react';
 import { fetchTasks } from '@/redux/slices/TaskSlice';
 
-import { taskStatus } from '@/types';
 import { getUserTasks } from '../../api/getUserTasks';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { taskStatus } from '@/constants/task-status';
 
 const Columns = () => {
   const { user } = useUser();

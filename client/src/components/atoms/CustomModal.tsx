@@ -28,7 +28,7 @@ const CustomModal = ({ children, setOpen }: CustomModalProps) => {
           onClick={() => setOpen(false)}
         >
           <motion.div
-            className="bg-white p-4 rounded-lg shadow-lg"
+            className=""
             variants={slideDownVariants}
             initial="hidden"
             animate="visible"

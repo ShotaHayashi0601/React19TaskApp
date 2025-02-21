@@ -22,16 +22,20 @@ import {
 import { Icons } from '@/constants/icons';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
-import { Task, taskStatus, TaskStatus } from '@/types';
+import { Task, TaskStatus } from '@/types';
 import { useUser } from '@clerk/clerk-react';
 import { FormAction, formActions } from '@/types/form-action';
-import {
-  handleAdd,
-  handleDelete,
-  handleUpdate,
-} from '../../services/taskAction';
+import { handleAdd, handleUpdate } from '../../services/taskAction';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import WithIconButton from '@/components/atoms/WithIconButton';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { taskStatus, taskStatuses } from '@/constants/task-status';
 
 interface InputTaskFormProps {
   status: TaskStatus;
@@ -75,11 +79,11 @@ function getActionPropsForButton(action: FormAction) {
         icon: Icons.check,
         text: '更新',
       };
-    case formActions.DELETE:
-      return {
-        icon: Icons.trash,
-        text: '削除',
-      };
+    // case formActions.DELETE:
+    //   return {
+    //     icon: Icons.trash,
+    //     text: '削除',
+    //   };
     default: {
       const exhaustiveCheck: never = action;
       throw new Error(`Unhandled action case: ${exhaustiveCheck}`);
@@ -110,7 +114,6 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, formAction, isPending] = useActionState(
     async (prevState: TaskForm, formData: FormData) => {
-      const id = '';
       const data = Object.fromEntries(
         formData.entries()
       ) as unknown as TaskForm;
@@ -126,7 +129,6 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
             dispatch,
             setOptimisticTasks
           ),
-        delete: () => handleDelete(id),
       };
       setOpen(false);
       await actionsHandlers[action]();
@@ -152,7 +154,12 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
 
   return (
     <CustomModal setOpen={setOpen}>
-      <div className="bg-white p-4 overflow-hidden w-[360px] lg:max-h-[500px] 2xl:max-h-[800px] overflow-y-auto">
+      <div
+        className={cn(
+          'max-h-[90vh] overflow-y-auto p-4 rounded-lg shadow-lg',
+          'bg-white p-4 overflow-hidden w-[330px] lg:max-h-[500px] 2xl:max-h-[800px] overflow-y-auto'
+        )}
+      >
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
@@ -160,7 +167,7 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
               name="title"
               render={({ field }) => (
                 <FormItem className="min-h-[110px]">
-                  <FormLabel>タイトル</FormLabel>
+                  <FormLabel className="text-xs">タイトル</FormLabel>
                   <FormControl>
                     <Input
                       className={cn(
@@ -180,7 +187,7 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>内容・説明など</FormLabel>
+                  <FormLabel className="text-xs">内容・説明など</FormLabel>
                   <FormControl>
                     <Textarea
                       className={cn(
@@ -198,12 +205,50 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
                 </FormItem>
               )}
             />
+            <FormField
+              disabled={isPending}
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem className="min-h-[110px]">
+                  <FormLabel className="text-xs">ステータス</FormLabel>
+                  <Select
+                    disabled={isPending}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl
+                      className={cn(
+                        'border-blue-400  outline-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-none',
+                        'text-gray-800 h-10'
+                      )}
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="ステータスを選択"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {taskStatuses.map((status) => (
+                        <SelectItem key={status.id} value={status.id}>
+                          {status.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <Controller
               control={form.control}
               name="dueDate"
               render={({ field }) => (
                 <FormItem className="flex flex-col min-h-[90px]">
-                  <FormLabel>期限</FormLabel>
+                  <FormLabel className="text-xs">期限</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -239,7 +284,7 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
               name="expectedTime"
               render={({ field }) => (
                 <FormItem className="min-h-[100px]">
-                  <FormLabel>予定作業時間 (分)</FormLabel>
+                  <FormLabel className="text-xs">予定作業時間 (分)</FormLabel>
                   <FormControl>
                     <Input
                       className={cn(
@@ -261,7 +306,7 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
               name="actualTime"
               render={({ field }) => (
                 <FormItem className="min-h-[100px]">
-                  <FormLabel>実績作業時間 (分)</FormLabel>
+                  <FormLabel className="text-xs">実績作業時間 (分)</FormLabel>
                   <FormControl>
                     <Input
                       className={cn(

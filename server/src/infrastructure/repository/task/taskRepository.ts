@@ -12,4 +12,7 @@ export class TaskRepository {
   async findByUserId(userId: string): Promise<Task[]> {
     return await taskGateway.findByUserId(userId);
   }
+  async deleteOne(taskId: string): Promise<Task> {
+    return await taskGateway.deleteOne(taskId);
+  }
 }

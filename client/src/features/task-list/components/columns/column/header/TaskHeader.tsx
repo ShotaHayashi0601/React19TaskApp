@@ -1,9 +1,10 @@
 import AddTaskButton from '../../../buttons/AddTaskButton';
 import { cn } from '@/lib/utils';
-import { Task, taskStatus, TaskStatus } from '@/types';
+import { Task, TaskStatus } from '@/types';
 import { FC, useState } from 'react';
 import InputTaskForm from '../../../forms/InputTaskForm';
 import { formActions } from '@/types/form-action';
+import { taskStatus, taskStatusName } from '@/constants/task-status';
 
 interface TaskHeaderProps {
   status: TaskStatus;
@@ -34,8 +35,14 @@ const TaskHeader: FC<TaskHeaderProps> = ({ status, setOptimisticTasks }) => {
           'w-full px-4 py-2 bg-gray-50 flex justify-between items-center'
         )}
       >
-        <div className={`${bgColor(status)} py-2 px-2 rounded-[.5rem]`}>
-          <h2 className="md:text-[16px] text-white">未着手</h2>
+        <div
+          className={`${bgColor(
+            status
+          )} py-2 pl-2 rounded-[.5rem] w-[80px] text-center`}
+        >
+          <h2 className="md:text-sm text-white tracking-[.5rem]">
+            {taskStatusName[status]}
+          </h2>
         </div>
         <AddTaskButton text={'追加'} onClick={() => setOpen(true)} />
       </div>

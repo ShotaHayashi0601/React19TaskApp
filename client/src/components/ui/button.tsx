@@ -45,14 +45,14 @@ const buttonVariants = cva(
         alertGhost:
           'hover:bg-accent hover:text-accent-foreground text-blue-600 hover:text-blue-dark underline-offset-4 underline',
         primaryOutline:
-          'text-green-600 outline outline-1 outline-green-primary hover:bg-green-thin hover:text-green-dark hover:outline-green-dark',
+          'text-green-600 outline outline-1 outline-green-500 hover:bg-green-thin hover:text-green-dark hover:outline-green-dark',
         blueOutline:
-          'text-blue-600 outline outline-1 outline-blue-primary hover:bg-blue-thin hover:text-blue-dark hover:outline-blue-dark',
+          'text-blue-600 outline outline-1 outline-blue-500 hover:bg-blue-thin hover:text-blue-dark hover:outline-blue-dark',
         redOutline:
-          'text-red-600 outline outline-1 outline-red-primary hover:bg-red-thin hover:text-red-dark hover:outline-red-dark',
-        primary: 'bg-green-primary text-white-primary hover:bg-green-dark',
-        primaryRed: 'bg-red-primary text-white-primary hover:bg-red-dark',
-        primaryBlue: 'bg-blue-primary text-white-primary hover:bg-blue-dark',
+          'text-red-600 outline outline-1 outline-red-500 hover:bg-red-thin hover:text-red-dark hover:outline-red-dark',
+        primary: 'bg-green-500 text-white hover:bg-green-700',
+        primaryRed: 'bg-red-500 text-white hover:bg-red-700',
+        primaryBlue: 'bg-blue-500 text-white hover:bg-blue-700',
       },
       size: {
         default: 'h-9 px-4 py-2',

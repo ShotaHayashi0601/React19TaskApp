@@ -1,4 +1,4 @@
-import { taskStatus } from '@/types';
+import { taskStatus } from '@/constants/task-status';
 import { z } from 'zod';
 
 export const taskFormSchema = z.object({
