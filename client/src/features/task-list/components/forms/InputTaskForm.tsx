@@ -22,7 +22,6 @@ import {
 import { Icons } from '@/constants/icons';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
-import AddTaskButton from '../buttons/AddTaskButton';
 import { Task, taskStatus, TaskStatus } from '@/types';
 import { useUser } from '@clerk/clerk-react';
 import { FormAction, formActions } from '@/types/form-action';
@@ -32,6 +31,7 @@ import {
   handleUpdate,
 } from '../../services/taskAction';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import WithIconButton from '@/components/atoms/WithIconButton';
 
 interface InputTaskFormProps {
   status: TaskStatus;
@@ -51,6 +51,7 @@ function getInitialValues(action: FormAction, task?: Task): TaskForm {
       expectedTime: task.expectedTime,
       actualTime: task.actualTime ?? 0,
       status: task.status,
+      order: task.order,
     };
   } else {
     return {
@@ -61,7 +62,28 @@ function getInitialValues(action: FormAction, task?: Task): TaskForm {
       expectedTime: 0,
       actualTime: 0,
       status: taskStatus.PENDING,
+      order: 0,
     };
+  }
+}
+function getActionPropsForButton(action: FormAction) {
+  switch (action) {
+    case formActions.ADD:
+      return { icon: Icons.plus, text: '追加' };
+    case formActions.UPDATE:
+      return {
+        icon: Icons.check,
+        text: '更新',
+      };
+    case formActions.DELETE:
+      return {
+        icon: Icons.trash,
+        text: '削除',
+      };
+    default: {
+      const exhaustiveCheck: never = action;
+      throw new Error(`Unhandled action case: ${exhaustiveCheck}`);
+    }
   }
 }
 
@@ -73,6 +95,10 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
   task,
 }) => {
   const defaultValues = getInitialValues(action, task);
+
+  console.log(task);
+  const { icon: buttonIcon, text: buttonText } =
+    getActionPropsForButton(action);
   const form = useForm<TaskForm>({
     resolver: zodResolver(taskFormSchema),
     mode: 'onChange',
@@ -253,7 +279,12 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
               )}
             />
             <div className="mx-auto w-[100px]">
-              <AddTaskButton text={'追加'} type="submit" disabled={isPending} />
+              <WithIconButton
+                text={buttonText}
+                type="submit"
+                disabled={isPending}
+                icon={buttonIcon}
+              />
             </div>
           </form>
         </Form>

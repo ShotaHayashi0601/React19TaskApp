@@ -40,7 +40,6 @@ export const handleUpdate = async (
   dispatch: AppDispatch,
   setOptimisticTasks: (tasks: Task[]) => void
 ) => {
-  const order = tasks.length + 1;
   const updatedTask: Task = {
     id: data.id,
     userId: userId,
@@ -52,11 +51,12 @@ export const handleUpdate = async (
     dueDate: formatDate(data.dueDate),
     createdAt: formatDateTime(new Date()),
     updatedAt: formatDateTime(new Date()),
-    order: order, //todo: orderの値をどうするか
+    order: data.order, //todo: orderの値をどうするか
   };
   setOptimisticTasks(
     tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
   );
+  console.log(updatedTask);
   await updateSingleTask(updatedTask);
   dispatch(updateTask(updatedTask));
 };

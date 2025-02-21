@@ -14,6 +14,7 @@ const initialState: TaskState = {
   error: null,
 };
 
+//非同期処理の定義
 export const fetchTasks = createAsyncThunk(
   'task/fetchTasks',
   async (userId: string) => {
@@ -46,6 +47,10 @@ const taskSlice = createSlice({
       }
     },
   },
+  /* Reducerの魔改造(ReduxThunkの非同期処理を追加)
+    本来dispatcherにはプレーンなオブジェクトを渡すが
+    createAsyncThunkを使うと非同期処理を追加できる
+  */
   extraReducers: (builder) => {
     builder
       .addCase(fetchTasks.pending, (state) => {

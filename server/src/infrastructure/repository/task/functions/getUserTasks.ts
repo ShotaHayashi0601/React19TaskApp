@@ -6,5 +6,11 @@ export const getUserTasks = async (userId: string): Promise<Task[]> => {
     where: {
       userId: userId,
     },
+    include: {
+      user: true,
+    },
+    orderBy: {
+      order: 'asc',
+    },
   });
 };

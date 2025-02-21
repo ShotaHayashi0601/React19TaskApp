@@ -34,6 +34,7 @@ export const taskFormSchema = z.object({
     })
     .int()
     .min(0, { message: '0以上の数値を入力してください' }),
+  order: z.number().int().min(0, { message: '0以上の数値を入力してください' }),
 });
 
 export type TaskForm = z.infer<typeof taskFormSchema>;
