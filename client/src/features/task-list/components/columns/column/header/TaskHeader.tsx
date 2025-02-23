@@ -8,7 +8,7 @@ import { taskStatus, taskStatusName } from '@/constants/task-status';
 
 interface TaskHeaderProps {
   status: TaskStatus;
-  setOptimisticTasks: (tasks: Task[]) => void;
+  setOptimisticTasks?: (tasks: Task[]) => void;
 }
 const bgColor = (status: TaskStatus): string => {
   switch (status) {
@@ -46,7 +46,7 @@ const TaskHeader: FC<TaskHeaderProps> = ({ status, setOptimisticTasks }) => {
         </div>
         <AddTaskButton text={'追加'} onClick={() => setOpen(true)} />
       </div>
-      {isOpen && (
+      {isOpen && setOptimisticTasks && (
         <InputTaskForm
           setOpen={setOpen}
           status={status}
