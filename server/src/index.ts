@@ -43,9 +43,9 @@ app.get('/', (c) => {
 // ✅ サーバー起動部分 (Renderに必要)
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 console.log(`Server running at http://localhost:${port}`);
-serve({
-  fetch: app.fetch,
+Bun.serve({
   port: port,
+  fetch: app.fetch,
 });
 
 // export default app;
