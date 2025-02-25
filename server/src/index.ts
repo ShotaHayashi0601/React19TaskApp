@@ -47,8 +47,8 @@ console.log(`Server running at http://localhost:${port}`);
 //   port: port,
 //   fetch: app.fetch,
 // });
-// serve({
-//   fetch: app.fetch,
-//   port: port,
-// });
-export default app;
+serve({
+  fetch: app.fetch,
+  port: port,
+});
+// export default app;

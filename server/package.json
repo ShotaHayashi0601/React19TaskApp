@@ -2,11 +2,11 @@
   "name": "server",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "start": "bun run src/index.ts"
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@hono/clerk-auth": "^2.0.0",
-    "@types/date-fns": "^2.6.3",
     "@types/uuid": "^10.0.0",
     "@vercel/node": "^5.1.8",
     "date-fns": "^4.1.0",
@@ -19,7 +19,11 @@
     "@prisma/client": "^6.3.1",
     "@prisma/extension-accelerate": "^1.2.2",
     "@types/bun": "latest",
-    "svix": "^1.45.1"
+    "@types/date-fns": "^2.5.3",
+    "@types/node": "^22.13.5",
+    "svix": "^1.45.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   },
   "peerDependencies": {
     "prisma": "^6.3.1",
