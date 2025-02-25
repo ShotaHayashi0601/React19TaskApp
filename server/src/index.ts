@@ -17,36 +17,32 @@ import 'dotenv/config';
 //     credentials: true,
 //   })
 // );
-// app.use(
-//   '*',
-//   clerkMiddleware({
-//     secretKey: process.env.CLERK_SECRET_KEY,
-//     publishableKey: process.env.CLERK_PUBLISHABLE_KEY,
-//   })
-// );
-// app.use(
-//   '/*',
-//   cors({
-//     origin: '*', // すべてのオリジンを許可
-//     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//     allowHeaders: ['Content-Type', 'Authorization'],
-//     exposeHeaders: ['Content-Length'],
-//     maxAge: 3600,
-//   })
-// );
+app.use(
+  '*',
+  clerkMiddleware({
+    secretKey: process.env.CLERK_SECRET_KEY,
+    publishableKey: process.env.CLERK_PUBLISHABLE_KEY,
+  })
+);
+app.use(
+  '/*',
+  cors({
+    origin: '*', // すべてのオリジンを許可
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+    exposeHeaders: ['Content-Length'],
+    maxAge: 3600,
+  })
+);
 
-// app.route('/webhooks', webhookRouter);
-// app.route('/tasks', taskRouter);
+app.route('/webhooks', webhookRouter);
+app.route('/tasks', taskRouter);
 app.get('/', (c) => {
   return c.text('Hello Hono!');
 });
 // ✅ サーバー起動部分 (Renderに必要)
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-console.log(`Server running at http://localhost:${port}`);
-// Bun.serve({
-//   port: port,
-//   fetch: app.fetch,
-// });
+
 serve({
   fetch: app.fetch,
   port: port,
