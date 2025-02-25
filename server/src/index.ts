@@ -3,7 +3,6 @@ import { cors } from 'hono/cors';
 import webhookRouter from './presentation/webhook/webhookRouter';
 import taskRouter from './presentation/task/taskRouter';
 import { clerkMiddleware } from '@hono/clerk-auth';
-import { handle } from 'hono/vercel';
 const app = new Hono().basePath('/api');
 import 'dotenv/config';
 // app.use(
@@ -40,5 +39,7 @@ import 'dotenv/config';
 app.get('/', (c) => {
   return c.text('Hello Hono!');
 });
-// export default app;
-export default handle(app);
+export default {
+  port: 5501,
+  fetch: app.fetch,
+};

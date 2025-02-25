@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: react19-task-app-api
+    runtime: node
+    plan: free
+    buildCommand: 'bun install'
+    startCommand: 'bun run src/index.ts'
+    region: oregon
+    branch: main
