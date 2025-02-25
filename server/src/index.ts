@@ -39,7 +39,4 @@ import 'dotenv/config';
 app.get('/', (c) => {
   return c.text('Hello Hono!');
 });
-export default {
-  port: 5501,
-  fetch: app.fetch,
-};
+export default app;
