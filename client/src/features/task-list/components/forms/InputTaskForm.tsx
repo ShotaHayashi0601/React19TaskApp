@@ -121,7 +121,8 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
         formData.entries()
       ) as unknown as TaskForm;
       const actionsHandlers: Record<FormAction, () => Promise<void>> = {
-        add: () => handleAdd(data, userId, tasks, dispatch, setOptimisticTasks),
+        add: () =>
+          handleAdd(data, userId, tasks, dispatch, setOptimisticTasks, token),
         update: () =>
           handleUpdate(
             data,

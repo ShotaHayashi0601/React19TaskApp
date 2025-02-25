@@ -16,26 +16,28 @@ import 'dotenv/config';
 //     credentials: true,
 //   })
 // );
-app.use(
-  '*',
-  clerkMiddleware({
-    secretKey: process.env.CLERK_SECRET_KEY,
-    publishableKey: process.env.CLERK_PUBLISHABLE_KEY,
-  })
-);
-app.use(
-  '/*',
-  cors({
-    origin: '*', // すべてのオリジンを許可
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization'],
-    exposeHeaders: ['Content-Length'],
-    maxAge: 3600,
-  })
-);
+// app.use(
+//   '*',
+//   clerkMiddleware({
+//     secretKey: process.env.CLERK_SECRET_KEY,
+//     publishableKey: process.env.CLERK_PUBLISHABLE_KEY,
+//   })
+// );
+// app.use(
+//   '/*',
+//   cors({
+//     origin: '*', // すべてのオリジンを許可
+//     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//     allowHeaders: ['Content-Type', 'Authorization'],
+//     exposeHeaders: ['Content-Length'],
+//     maxAge: 3600,
+//   })
+// );
 
-app.route('/webhooks', webhookRouter);
-app.route('/tasks', taskRouter);
-
+// app.route('/webhooks', webhookRouter);
+// app.route('/tasks', taskRouter);
+app.get('/', (c) => {
+  return c.text('Hello Hono!');
+});
 // Cloudflare Workers 用のエクスポート
 export default app;
