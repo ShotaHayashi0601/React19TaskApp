@@ -9,9 +9,10 @@
     "@hono/clerk-auth": "^2.0.0",
     "@types/date-fns": "^2.6.3",
     "@types/uuid": "^10.0.0",
+    "@vercel/node": "^5.1.8",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
-    "hono": "^4.7.1",
+    "hono": "^4.7.2",
     "uuid": "^11.0.5"
   },
   "devDependencies": {
