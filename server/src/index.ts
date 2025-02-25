@@ -7,23 +7,23 @@ const app = new Hono().basePath('/api');
 // app.use(
 //   '/*',
 //   cors({
-//     origin: ['*'],
-//     allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     origin: (origin) => origin ?? 'http://localhost:5173', //
+//     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // OPTIONS を追加
 //     allowHeaders: ['Content-Type', 'Authorization'],
 //     exposeHeaders: ['Content-Length'],
 //     maxAge: 3600,
-//     // credentials: true,
+//     credentials: true,
 //   })
 // );
+
 app.use(
   '/*',
   cors({
-    origin: (origin) => origin ?? 'http://localhost:5173', // フロントエンドのURLを指定
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // OPTIONS を追加
+    origin: '*', // すべてのオリジンを許可
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowHeaders: ['Content-Type', 'Authorization'],
     exposeHeaders: ['Content-Length'],
     maxAge: 3600,
-    credentials: true,
   })
 );
 

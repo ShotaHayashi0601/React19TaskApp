@@ -48,8 +48,7 @@ webhookRouter.post('/', async (c) => {
 
   const eventType = evt.type;
   const data = evt.data;
-
-  if (eventType === 'user.created') {
+  if (eventType === 'user.created' || eventType === 'user.updated') {
     const user: User = {
       id: data.id,
       email: data.email_addresses[0].email_address,

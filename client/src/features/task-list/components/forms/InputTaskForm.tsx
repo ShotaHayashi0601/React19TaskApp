@@ -35,7 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { taskStatus, taskStatuses } from '@/constants/task-status';
+import { taskStatuses } from '@/constants/task-status';
 
 interface InputTaskFormProps {
   status: TaskStatus;
@@ -45,7 +45,11 @@ interface InputTaskFormProps {
   task?: Task;
 }
 
-function getInitialValues(action: FormAction, task?: Task): TaskForm {
+function getInitialValues(
+  action: FormAction,
+  status: TaskStatus,
+  task?: Task
+): TaskForm {
   if (action === formActions.UPDATE && task) {
     return {
       id: task.id,
@@ -65,7 +69,7 @@ function getInitialValues(action: FormAction, task?: Task): TaskForm {
       dueDate: new Date(),
       expectedTime: 0,
       actualTime: 0,
-      status: taskStatus.PENDING,
+      status,
       order: 0,
     };
   }
@@ -98,9 +102,8 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
   setOptimisticTasks,
   task,
 }) => {
-  const defaultValues = getInitialValues(action, task);
+  const defaultValues = getInitialValues(action, status, task);
 
-  console.log(task);
   const { icon: buttonIcon, text: buttonText } =
     getActionPropsForButton(action);
   const form = useForm<TaskForm>({
@@ -118,8 +121,7 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
         formData.entries()
       ) as unknown as TaskForm;
       const actionsHandlers: Record<FormAction, () => Promise<void>> = {
-        add: () =>
-          handleAdd(data, userId, status, tasks, dispatch, setOptimisticTasks),
+        add: () => handleAdd(data, userId, tasks, dispatch, setOptimisticTasks),
         update: () =>
           handleUpdate(
             data,

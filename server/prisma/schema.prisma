@@ -9,36 +9,40 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  tasks    Task[] @relation("UserTasks")
+  id    String @id @default(uuid())
+  name  String
+  email String @unique
+  tasks Task[] @relation("UserTasks")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 }
 
 model Task {
-  id          String   @id @default(uuid())
-  title       String
-  description String?
-  status      TaskStatus @default(PENDING)
+  id           String     @id @default(uuid())
+  title        String
+  description  String?
+  status       TaskStatus @default(PENDING)
   expectedTime Int
-  actualTime  Int?
-  dueDate     String?
+  actualTime   Int?
+  dueDate      String?
 
-  userId     String
-  user       User @relation("UserTasks",fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation("UserTasks", fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt()
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
 
-  order     Int @default(0) 
+  order Int @default(0)
+
+  @@index([userId], name: "task_userId_idx")
+  @@index([userId, status], name: "task_userId_status_idx")
+  @@index([userId, dueDate], name: "task_userId_dueDate_idx")
 }
 
 enum TaskStatus {

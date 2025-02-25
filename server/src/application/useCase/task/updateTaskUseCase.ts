@@ -6,4 +6,7 @@ export class UpdateTaskUseCase {
   async updateOne(task: Task): Promise<Task> {
     return await this._taskRepository.updateOne(task);
   }
+  async updateOrdersAndStatuses(tasks: Task[]): Promise<Task[]> {
+    return await this._taskRepository.updateOrdersAndStatuses(tasks);
+  }
 }
