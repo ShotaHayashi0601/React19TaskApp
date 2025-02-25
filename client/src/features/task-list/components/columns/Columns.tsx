@@ -1,9 +1,15 @@
-import { Suspense, useEffect, useMemo, useOptimistic, useState } from 'react';
+import {
+  startTransition,
+  Suspense,
+  useEffect,
+  useMemo,
+  useOptimistic,
+  useState,
+} from 'react';
 import Column from './column/Column';
 import CardSkeleton from '@/components/atoms/CardSkeleton';
 import { cn } from '@/lib/utils';
-import { useUser } from '@clerk/clerk-react';
-import { fetchTasks } from '@/redux/slices/TaskSlice';
+import { fetchTasks } from '@/redux/slices/taskSlice';
 
 import { getUserTasks } from '../../api/getUserTasks';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -27,11 +33,11 @@ import { updateTaskOrdersAndStatus } from '../../lib/dndUtils';
 import { handleReorder } from '../../services/taskAction';
 
 const Columns = () => {
-  const { user } = useUser();
   const dispatch = useAppDispatch();
   const { taskList: tasks } = useAppSelector((state) => state.task);
   const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const token = useAppSelector((state) => state.auth.token);
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -41,21 +47,26 @@ const Columns = () => {
   );
 
   useEffect(() => {
-    if (user?.id) {
-      // RTKの非同期処理を使ってデータを取得
-      dispatch(fetchTasks(user.id));
+    if (token) {
+      // ✅ トークンも一緒に渡す
+      dispatch(fetchTasks({ token: token }));
     }
-  }, [user, dispatch]);
+  }, [dispatch, token]);
+
   // 表示用のフェッチ処理（学習のため実装している）
+
   const fetchTasksForSkeleton = useMemo(() => {
-    return getUserTasks(user?.id);
-  }, []);
-  if (!user?.id) return null;
+    if (!token) return;
+    return getUserTasks(token);
+  }, [token]);
+  if (!token) return null;
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     const activeTaskId = active.id as string;
-    const foundTask = optimisticTasks.find((task) => task.id === activeTaskId);
+    const foundTask = optimisticTasks.find(
+      (task: Task) => task.id === activeTaskId
+    );
     if (foundTask) {
       setActiveTask(foundTask);
     }
@@ -91,8 +102,9 @@ const Columns = () => {
         }
         return t;
       });
-
-      await handleReorder(newTasks, dispatch, setOptimisticTasks);
+      startTransition(async () => {
+        await handleReorder(newTasks, dispatch, setOptimisticTasks, token);
+      });
 
       setActiveTask(null);
       return;
@@ -128,11 +140,14 @@ const Columns = () => {
         activeTaskId,
         targetStatus
       );
-      await handleReorder(
-        newTasksWithUpdatedOrders,
-        dispatch,
-        setOptimisticTasks
-      );
+      startTransition(async () => {
+        await handleReorder(
+          newTasksWithUpdatedOrders,
+          dispatch,
+          setOptimisticTasks,
+          token
+        );
+      });
     }
 
     setActiveTask(null);
@@ -165,7 +180,7 @@ const Columns = () => {
       <section className="flex justify-between gap-5 flex-1 py-3 overflow-x-auto">
         <ErrorBoundary
           fallback={<ErroFallback status={taskStatus.PENDING} />}
-          onReset={() => dispatch(fetchTasks(user.id))}
+          onReset={() => dispatch(fetchTasks({ token: token }))}
         >
           <Suspense
             fallback={
@@ -181,7 +196,7 @@ const Columns = () => {
             }
           >
             <Column
-              fetchForSkeleton={fetchTasksForSkeleton}
+              fetchForSkeleton={fetchTasksForSkeleton!}
               status={taskStatus.PENDING}
               optimisticTasks={optimisticTasks}
               setOptimisticTasks={setOptimisticTasks}
@@ -190,7 +205,7 @@ const Columns = () => {
         </ErrorBoundary>
         <ErrorBoundary
           fallback={<ErroFallback status={taskStatus.IN_PROGRESS} />}
-          onReset={() => dispatch(fetchTasks(user.id))}
+          onReset={() => dispatch(fetchTasks({ token: token }))}
         >
           <Suspense
             fallback={
@@ -206,7 +221,7 @@ const Columns = () => {
             }
           >
             <Column
-              fetchForSkeleton={fetchTasksForSkeleton}
+              fetchForSkeleton={fetchTasksForSkeleton!}
               status={taskStatus.IN_PROGRESS}
               optimisticTasks={optimisticTasks}
               setOptimisticTasks={setOptimisticTasks}
@@ -215,7 +230,7 @@ const Columns = () => {
         </ErrorBoundary>
         <ErrorBoundary
           fallback={<ErroFallback status={taskStatus.COMPLETED} />}
-          onReset={() => dispatch(fetchTasks(user.id))}
+          onReset={() => dispatch(fetchTasks({ token: token }))}
         >
           <Suspense
             fallback={
@@ -231,7 +246,7 @@ const Columns = () => {
             }
           >
             <Column
-              fetchForSkeleton={fetchTasksForSkeleton}
+              fetchForSkeleton={fetchTasksForSkeleton!}
               status={taskStatus.COMPLETED}
               optimisticTasks={optimisticTasks}
               setOptimisticTasks={setOptimisticTasks}

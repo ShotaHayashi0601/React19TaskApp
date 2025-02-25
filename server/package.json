@@ -4,6 +4,7 @@
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
+    "@hono/clerk-auth": "^2.0.0",
     "@types/date-fns": "^2.6.3",
     "@types/uuid": "^10.0.0",
     "date-fns": "^4.1.0",

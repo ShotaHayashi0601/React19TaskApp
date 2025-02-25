@@ -2,8 +2,9 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import webhookRouter from './presentation/webhook/webhookRouter';
 import taskRouter from './presentation/task/taskRouter';
+import { clerkMiddleware } from '@hono/clerk-auth';
 const app = new Hono().basePath('/api');
-
+import 'dotenv/config';
 // app.use(
 //   '/*',
 //   cors({
@@ -15,7 +16,13 @@ const app = new Hono().basePath('/api');
 //     credentials: true,
 //   })
 // );
-
+app.use(
+  '*',
+  clerkMiddleware({
+    secretKey: process.env.CLERK_SECRET_KEY,
+    publishableKey: process.env.CLERK_PUBLISHABLE_KEY,
+  })
+);
 app.use(
   '/*',
   cors({

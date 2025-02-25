@@ -103,7 +103,7 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
   task,
 }) => {
   const defaultValues = getInitialValues(action, status, task);
-
+  const token = useAppSelector((state) => state.auth.token);
   const { icon: buttonIcon, text: buttonText } =
     getActionPropsForButton(action);
   const form = useForm<TaskForm>({
@@ -126,10 +126,10 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
           handleUpdate(
             data,
             userId,
-            status,
             tasks,
             dispatch,
-            setOptimisticTasks
+            setOptimisticTasks,
+            token
           ),
       };
       setOpen(false);

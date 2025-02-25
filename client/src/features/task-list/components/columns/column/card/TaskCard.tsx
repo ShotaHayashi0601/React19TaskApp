@@ -9,7 +9,7 @@ import { isOverDate } from '@/utils';
 import CommonConfirm from '@/components/molecules/CommonConfirm';
 import { taskStatus } from '@/constants/task-status';
 import { handleDelete } from '@/features/task-list/services/taskAction';
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
@@ -48,6 +48,7 @@ const TaskCard: FC<TaskCardInterface> = ({
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const isDelayAlert = getIsDelayAlert(task.dueDate ?? '', task.status);
   const dispatch = useAppDispatch();
+  const token = useAppSelector((state) => state.auth.token);
 
   // Setup sortable
   const {
@@ -75,7 +76,7 @@ const TaskCard: FC<TaskCardInterface> = ({
   };
   const handleDeleteTask = async () => {
     startTransition(async () => {
-      await handleDelete(task.id, tasks, dispatch, setOptimisticTasks);
+      await handleDelete(task.id, tasks, dispatch, setOptimisticTasks, token);
     });
   };
 

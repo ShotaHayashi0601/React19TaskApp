@@ -6,6 +6,7 @@ import { GetTaskUseCase } from '../../application/useCase/task/getTaskUseCase';
 import { formatDateTime } from '../../utils/formatting';
 import { UpdateTaskUseCase } from '../../application/useCase/task/updateTaskUseCase';
 import { DeleteTaskUseCase } from '../../application/useCase/task/deleteTaskUseCase';
+import { getAuth } from '@hono/clerk-auth';
 
 const taskRouter = new Hono();
 const createTaskUseCase = new CreateTaskUseCase(new TaskRepository());
@@ -43,6 +44,11 @@ taskRouter.post('/', async (c) => {
  * ✅ タスクの単一更新
  */
 taskRouter.put('/', async (c) => {
+  const auth = getAuth(c);
+  const userId = auth?.userId;
+  if (!userId) {
+    return c.json({ success: false, message: '認証情報が不正です。' }, 403);
+  }
   try {
     const rowTask = await c.req.json();
     const task: Task = {
@@ -70,6 +76,11 @@ taskRouter.put('/', async (c) => {
  */
 taskRouter.put('/bulk-update-order-status', async (c) => {
   try {
+    const auth = getAuth(c);
+    const userId = auth?.userId;
+    if (!userId) {
+      return c.json({ success: false, message: '認証情報が不正です。' }, 403);
+    }
     const tasks: Task[] = await c.req.json();
     if (!Array.isArray(tasks)) {
       return c.json(
@@ -89,9 +100,13 @@ taskRouter.put('/bulk-update-order-status', async (c) => {
 /**
  * ✅ ユーザー単位のタスク取得
  */
-taskRouter.get('/:userId', async (c) => {
+taskRouter.get('/', async (c) => {
   try {
-    const userId = c.req.param('userId');
+    const auth = getAuth(c);
+    const userId = auth?.userId;
+    if (!userId) {
+      return c.json({ success: false, message: '認証情報が不正です。' }, 403);
+    }
     const tasks = await getTaskUseCase.findByUserId(userId);
     const taskList = tasks.map((task) => ({
       ...task,
@@ -109,6 +124,11 @@ taskRouter.get('/:userId', async (c) => {
  */
 taskRouter.delete('/:taskId', async (c) => {
   try {
+    const auth = getAuth(c);
+    const userId = auth?.userId;
+    if (!userId) {
+      return c.json({ success: false, message: '認証情報が不正です。' }, 403);
+    }
     const taskId = c.req.param('taskId');
     await deleteTaskUseCase.deleteOne(taskId);
     return c.json({ success: true });

@@ -55,17 +55,13 @@ export const columnSlice = createSlice({
      */
     reorderColumns: (
       state,
-      action: PayloadAction<{
-        oldIndex: number;
-        newIndex: number;
-      }>
+      action: PayloadAction<{ oldIndex: number; newIndex: number }>
     ) => {
       const { oldIndex, newIndex } = action.payload;
       state.columns = arrayMove(state.columns, oldIndex, newIndex);
-
-      // ついでに orderを振り直す場合
-      state.columns.forEach((col, idx) => {
-        col.order = idx + 1;
+      // orderを振り直す例
+      state.columns.forEach((col, i) => {
+        col.order = i + 1;
       });
     },
   },

@@ -17,8 +17,8 @@ const initialState: TaskState = {
 //非同期処理の定義
 export const fetchTasks = createAsyncThunk(
   'task/fetchTasks',
-  async (userId: string) => {
-    const tasks = await getUserTasks(userId);
+  async ({ token }: { token: string }) => {
+    const tasks = await getUserTasks(token);
     return tasks;
   }
 );
