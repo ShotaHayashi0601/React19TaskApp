@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "build": "bun build src/index.ts --outdir dist",
-    "start": "bun run dist/index.js"
+    "start": "bun run dist/index.js",
+    "vercel-build": "bun build src/index.ts --outdir dist"
   },
   "dependencies": {
     "@hono/clerk-auth": "^2.0.0",
