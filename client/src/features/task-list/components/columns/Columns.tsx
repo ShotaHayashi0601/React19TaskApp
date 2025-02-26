@@ -9,7 +9,6 @@ import {
 import Column from './column/Column';
 import CardSkeleton from '@/components/atoms/CardSkeleton';
 import { cn } from '@/lib/utils';
-import { fetchTasks } from '@/redux/slices/taskSlice';
 
 import { getUserTasks } from '../../api/getUserTasks';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -31,6 +30,7 @@ import { Task, TaskStatus } from '@/types';
 import TaskCard from './column/card/TaskCard';
 import { updateTaskOrdersAndStatus } from '../../lib/dndUtils';
 import { handleReorder } from '../../services/taskAction';
+import { fetchTasks } from '../../../../redux/slices/taskSlice';
 
 const Columns = () => {
   const dispatch = useAppDispatch();
