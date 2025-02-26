@@ -1,10 +1,10 @@
 const IMAGES = {
   LOGO: {
-    PATH: '/public/logo/logo.svg',
+    PATH: '/logo/logo.svg',
     ALT: 'logo',
   },
   NOT_FOUND: {
-    PATH: '/public/images/not-found.svg',
+    PATH: '/images/not-found.svg',
     ALT: 'logo',
   },
 };
