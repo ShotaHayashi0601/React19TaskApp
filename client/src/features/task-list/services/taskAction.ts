@@ -7,7 +7,7 @@ import {
   deleteTask,
   initializeTask,
   updateTask,
-} from '@/redux/slices/_taskSlice';
+} from '@/redux/slices/taskSlice';
 import { formatDate, formatDateTime } from '@/utils';
 import { v4 as uuidv4 } from 'uuid';
 import { updateSingleTask } from '../api/updateSingleTask';
