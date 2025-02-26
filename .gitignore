@@ -7,3 +7,5 @@
 # node_modules フォルダを除外
 node_modules/
 
+# dist フォルダを除外
+dist/

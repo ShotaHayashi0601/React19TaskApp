@@ -19,6 +19,11 @@ const getTaskUseCase = new GetTaskUseCase(new TaskRepository());
  */
 taskRouter.post('/', async (c) => {
   try {
+    const auth = getAuth(c);
+    const userId = auth?.userId;
+    if (!userId) {
+      return c.json({ success: false, message: '認証情報が不正です。' }, 403);
+    }
     const rowTask = await c.req.json();
     const task: Task = {
       id: rowTask.id,

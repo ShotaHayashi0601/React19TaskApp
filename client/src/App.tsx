@@ -1,4 +1,4 @@
-import { useClerkToken } from './lib/clerk/useClerkToken';
+import { useClerkToken } from './lib/clerk/hooks/useClerkToken';
 import Router from './routes/Router';
 
 function App() {
