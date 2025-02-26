@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import TaskCard from './TaskCard';
 import { Task, TaskStatus } from '@/types';
 import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';
