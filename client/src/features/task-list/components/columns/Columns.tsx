@@ -30,7 +30,7 @@ import { Task, TaskStatus } from '@/types';
 import TaskCard from './column/card/TaskCard';
 import { updateTaskOrdersAndStatus } from '../../lib/dndUtils';
 import { handleReorder } from '../../services/taskAction';
-import { fetchTasks } from '../../../../redux/slices/taskSlice';
+import { fetchTasks } from '../../../../redux/slices/TaskSlice';
 
 const Columns = () => {
   const dispatch = useAppDispatch();
