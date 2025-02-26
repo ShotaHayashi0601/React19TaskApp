@@ -1,6 +1,5 @@
 import { HEADER_HEIGHT, IMAGES } from '@/constants';
 import { cn } from '@/lib/utils';
-import React from 'react';
 
 const NomatchPage = () => {
   return (
