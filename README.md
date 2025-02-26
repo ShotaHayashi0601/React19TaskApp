@@ -7,7 +7,7 @@ React19、Clerk+Hono、Prisam+Supabase の学習のために作成しました�
 
 ## 🚀 デモ
 
-![タスク管理アプリスクリーンショット](client/public/images/readme/title.png)
+![タスク管理アプリスクリーンショット](client/public/images/readme/title2.png)
 
 デモページ: [タスク管理アプリを試す](https://react19-task-app-client.vercel.app/)
 説明資料： [GoogleSlide を開く](https://docs.google.com/presentation/d/1qkqk8Rfvsz4jDaKrkNyvebYhixklNKejIz509w7UMcA/edit?usp=sharing)
@@ -28,9 +28,12 @@ React19、Clerk+Hono、Prisam+Supabase の学習のために作成しました�
 
 ## 🛠️ 使用技術
 
-- フロントエンド: React19 ()
+- フロントエンド: React19
+- バックエンド:Hono、Prisma
+- データベース:Supabase
+- 認証:Clerk
 - スタイリング: Tailwind CSS
-- 状態管理: useState, useReducer
+- 状態管理: ReduxToolKit
 - ビルドツール: Vite
 
 ---
