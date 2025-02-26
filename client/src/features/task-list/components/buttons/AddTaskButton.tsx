@@ -1,6 +1,6 @@
 import { Icons } from '@/constants/icons';
 import { cn } from '@/lib/utils';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 interface AddTaskButtonProps {
   text: string;
