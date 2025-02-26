@@ -53,27 +53,49 @@ React19、Clerk+Hono、Prisam+Supabase の学習のために作成しました�
    npm install
    ```
 
-3. **環境変数の設定**
-   client と server ディレクトリに `.env` ファイルを作成し、以下のように記述してください:
+### 3. **環境変数の設定**
 
-   - client/.env
+`client` と `server` ディレクトリに `.env` ファイルを作成し、以下のように記述してください。
 
-   ```ini
-   VITE_CLERK_PUBLISHABLE_KEY=pk_test_xxxx
-   VITE_API_BASE_URL=backend_api_url/api
-   ```
+#### 📂 **client/.env**
 
-   - server/.env
+| 変数名                       | 説明                          | 値の例                      |
+| ---------------------------- | ----------------------------- | --------------------------- |
+| `VITE_CLERK_PUBLISHABLE_KEY` | Clerk のパブリッシャブルキー  | `pk_test_xxxx`              |
+| `VITE_API_BASE_URL`          | バックエンドの API ベース URL | `http://localhost:8787/api` |
 
-   ```ini
-   DATABASE_URL = supabase_db_url
-   SIGNING_SECRET=clerk_sigining_secret
-   CLERK_PUBLISHABLE_KEY=pk_test_xxxxx
-   CLERK_SECRET_KEY=sk_test_xxxx
-   PORT=port_no
-   ```
+```ini
+# client/.env
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_xxxx
+VITE_API_BASE_URL=http://localhost:8787/api
+```
 
-   ⚡ **注意:** `.env` ファイルは**絶対に Git にコミットしないでください**。`gitignore`に以下を追加して保護します。
+#### 📂 **server/.env**
+
+| 変数名                  | 説明                         | 値の例                 |
+| ----------------------- | ---------------------------- | ---------------------- |
+| `DATABASE_URL`          | Supabase のデータベース URL  | `postgresql://...`     |
+| `SIGNING_SECRET`        | Clerk 用の署名シークレット   | `clerk_signing_secret` |
+| `CLERK_PUBLISHABLE_KEY` | Clerk のパブリッシャブルキー | `pk_test_xxxxx`        |
+| `CLERK_SECRET_KEY`      | Clerk のシークレットキー     | `sk_test_xxxx`         |
+| `PORT`                  | サーバー起動時のポート番号   | `8787`                 |
+
+```ini
+# server/.env
+DATABASE_URL=postgresql://...
+SIGNING_SECRET=clerk_signing_secret
+CLERK_PUBLISHABLE_KEY=pk_test_xxxxx
+CLERK_SECRET_KEY=sk_test_xxxx
+PORT=8787
+```
+
+⚡ **注意:** `.env` ファイルは**絶対に Git にコミットしないでください**。次の設定を `.gitignore` に追加して保護します。
+
+```gitignore
+# .env
+client/.env
+server/.env
+```
 
 4. **ローカルサーバーを起動**
    ```bash
