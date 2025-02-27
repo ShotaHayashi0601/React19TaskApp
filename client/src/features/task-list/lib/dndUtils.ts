@@ -26,7 +26,7 @@ export const updateTaskOrdersAndStatus = (
     statusTasks.forEach((task, index) => {
       updatedTasks.push({
         ...task,
-        order: index,
+        order: index + 1,
       });
     });
   });

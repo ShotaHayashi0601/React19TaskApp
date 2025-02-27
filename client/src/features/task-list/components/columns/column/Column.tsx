@@ -45,7 +45,11 @@ const Column: FC<ColumnProps> = ({
         'transition-colors duration-200'
       )}
     >
-      <TaskHeader status={status} setOptimisticTasks={setOptimisticTasks} />
+      <TaskHeader
+        status={status}
+        setOptimisticTasks={setOptimisticTasks}
+        optimisticTasks={optimisticTasks}
+      />
       <TaskList
         tasks={filteredTasks}
         setOptimisticTasks={setOptimisticTasks}

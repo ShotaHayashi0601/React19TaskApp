@@ -51,7 +51,7 @@ React19、Clerk+Hono、Prisam+Supabase の学習のために作成しました�
 
    ```bash
    cd client
-   npm i
+   npm i --legacy-peer-deps
    cd server
    npm i
    ```

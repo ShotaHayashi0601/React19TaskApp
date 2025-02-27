@@ -115,7 +115,7 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
 
   const dispatch = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, formAction, isPending] = useActionState(
+  const [updatedState, formAction, isPending] = useActionState(
     async (prevState: TaskForm, formData: FormData) => {
       const data = Object.fromEntries(
         formData.entries()
@@ -143,9 +143,7 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
   const user = useUser();
   if (!user?.user?.id) return null;
   const userId = user.user.id;
-
   const onSubmit: SubmitHandler<TaskForm> = (data) => {
-    console.log('submit!');
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {

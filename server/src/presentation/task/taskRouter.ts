@@ -57,7 +57,6 @@ taskRouter.put('/', async (c) => {
   }
   try {
     const rowTask = await c.req.json();
-    console.log('rowTask', rowTask);
     const task: Task = {
       id: rowTask.id,
       userId: rowTask.userId,
@@ -71,7 +70,6 @@ taskRouter.put('/', async (c) => {
       dueDate: rowTask.dueDate,
       order: parseInt(rowTask.order),
     };
-    console.log(task);
 
     const updatedTask = await updateTaskUseCase.updateOne(task);
     return c.json({ success: true, data: updatedTask });

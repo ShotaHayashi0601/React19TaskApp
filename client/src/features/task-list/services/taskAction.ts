@@ -65,7 +65,6 @@ export const handleUpdate = async (
     updatedAt: formatDateTime(new Date()),
     order: Number(data.order), //todo: orderの値をどうするか
   };
-  console.log(updatedTask);
   setOptimisticTasks(
     tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
   );
@@ -85,6 +84,7 @@ export const handleDelete = async (
   await deleteSingleTask(id, token);
   dispatch(deleteTask(id));
 };
+
 export const handleReorder = async (
   updatedTasks: Task[],
   dispatch: AppDispatch,
@@ -92,8 +92,15 @@ export const handleReorder = async (
   token: string | null
 ) => {
   if (!token) return;
+  const convertedTasks = updatedTasks.map((task) => ({
+    ...task,
+    order: Number(task.order),
+    actualTime: Number(task.actualTime),
+    expectedTime: Number(task.expectedTime),
+  }));
+
   // 1. 楽観的UI更新
-  setOptimisticTasks(updatedTasks);
+  setOptimisticTasks(convertedTasks);
 
   await updateOrdersAndStatuses(updatedTasks, token);
   dispatch(initializeTask(updatedTasks));
