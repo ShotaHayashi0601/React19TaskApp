@@ -50,7 +50,10 @@ React19、Clerk+Hono、Prisam+Supabase の学習のために作成しました�
 2. **依存関係をインストール**
 
    ```bash
-   npm install
+   cd client
+   npm i
+   cd server
+   npm i
    ```
 
 ### 3. **環境変数の設定**

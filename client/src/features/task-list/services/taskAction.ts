@@ -57,13 +57,15 @@ export const handleUpdate = async (
     title: data.title,
     status: data.status,
     description: data.description,
-    actualTime: data.actualTime,
-    expectedTime: data.expectedTime,
+
+    actualTime: Number(data.actualTime),
+    expectedTime: Number(data.expectedTime),
     dueDate: formatDate(data.dueDate),
     createdAt: formatDateTime(new Date()),
     updatedAt: formatDateTime(new Date()),
-    order: data.order, //todo: orderの値をどうするか
+    order: Number(data.order), //todo: orderの値をどうするか
   };
+  console.log(updatedTask);
   setOptimisticTasks(
     tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
   );

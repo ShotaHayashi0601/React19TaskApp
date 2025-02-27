@@ -52,10 +52,12 @@ taskRouter.put('/', async (c) => {
   const auth = getAuth(c);
   const userId = auth?.userId;
   if (!userId) {
+    console.log('認証情報が不正です');
     return c.json({ success: false, message: '認証情報が不正です。' }, 403);
   }
   try {
     const rowTask = await c.req.json();
+    console.log('rowTask', rowTask);
     const task: Task = {
       id: rowTask.id,
       userId: rowTask.userId,
@@ -69,6 +71,8 @@ taskRouter.put('/', async (c) => {
       dueDate: rowTask.dueDate,
       order: parseInt(rowTask.order),
     };
+    console.log(task);
+
     const updatedTask = await updateTaskUseCase.updateOne(task);
     return c.json({ success: true, data: updatedTask });
   } catch (error) {

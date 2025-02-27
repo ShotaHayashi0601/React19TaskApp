@@ -6,17 +6,7 @@ import { clerkMiddleware } from '@hono/clerk-auth';
 import { serve } from '@hono/node-server';
 const app = new Hono().basePath('/api');
 import 'dotenv/config';
-// app.use(
-//   '/*',
-//   cors({
-//     origin: (origin) => origin ?? 'http://localhost:5173', //
-//     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // OPTIONS を追加
-//     allowHeaders: ['Content-Type', 'Authorization'],
-//     exposeHeaders: ['Content-Length'],
-//     maxAge: 3600,
-//     credentials: true,
-//   })
-// );
+
 app.use(
   '*',
   clerkMiddleware({
@@ -27,7 +17,7 @@ app.use(
 app.use(
   '/*',
   cors({
-    origin: '*', // すべてのオリジンを許可
+    origin: '*',
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowHeaders: ['Content-Type', 'Authorization'],
     exposeHeaders: ['Content-Length'],

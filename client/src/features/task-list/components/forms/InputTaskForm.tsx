@@ -139,11 +139,13 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
     },
     defaultValues
   );
+
   const user = useUser();
   if (!user?.user?.id) return null;
   const userId = user.user.id;
 
   const onSubmit: SubmitHandler<TaskForm> = (data) => {
+    console.log('submit!');
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
@@ -156,7 +158,7 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
   };
 
   return (
-    <CustomModal setOpen={setOpen}>
+    <CustomModal setOpen={action === formActions.ADD ? setOpen : undefined}>
       <div
         className={cn(
           'max-h-[90vh] overflow-y-auto p-4 rounded-lg shadow-lg',
@@ -298,6 +300,7 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
                       placeholder="予定時間を入力"
                       {...field}
                       onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                      onFocus={(e) => field.onChange(e.target.valueAsNumber)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -326,13 +329,26 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
                 </FormItem>
               )}
             />
-            <div className="mx-auto w-[100px]">
-              <WithIconButton
-                text={buttonText}
-                type="submit"
-                disabled={isPending}
-                icon={buttonIcon}
-              />
+            <div className="mx-auto flex justify-center items-center gap-4">
+              <div className="w-[120px]">
+                <WithIconButton
+                  text={buttonText}
+                  type="submit"
+                  disabled={isPending}
+                  icon={buttonIcon}
+                />
+              </div>
+              {formActions.UPDATE === action && (
+                <div className="w-[120px]">
+                  <WithIconButton
+                    text={'キャンセル'}
+                    type="button"
+                    disabled={isPending}
+                    icon={undefined}
+                    onClick={() => setOpen(false)}
+                  />
+                </div>
+              )}
             </div>
           </form>
         </Form>

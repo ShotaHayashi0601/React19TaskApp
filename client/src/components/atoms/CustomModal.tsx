@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 interface CustomModalProps {
   children: React.ReactNode;
-  setOpen: (isOpen: boolean) => void;
+  setOpen?: (isOpen: boolean) => void;
 }
 
 const slideDownVariants = {
@@ -25,7 +25,7 @@ const CustomModal = ({ children, setOpen }: CustomModalProps) => {
             'fixed inset-0 z-50 flex items-center justify-center',
             'bg-[rgba(0,0,0,0.5)] w-screen h-screen'
           )}
-          onClick={() => setOpen(false)}
+          onClick={() => setOpen && setOpen(false)}
         >
           <motion.div
             className=""
