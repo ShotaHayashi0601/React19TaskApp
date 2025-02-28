@@ -35,15 +35,15 @@ export const calculateTaskSummary = (tasks: Task[]): TaskSummaryResult => {
     const { status, expectedTime, actualTime = 0 } = task;
 
     if (taskStatusSummary[status]) {
-      taskStatusSummary[status].expected += expectedTime;
-      taskStatusSummary[status].actual += actualTime;
+      taskStatusSummary[status].expected += Number(expectedTime);
+      taskStatusSummary[status].actual += Number(actualTime);
     }
 
-    totalExpectedTime += expectedTime;
-    totalActualTime += actualTime;
+    totalExpectedTime += Number(expectedTime);
+    totalActualTime += Number(actualTime);
 
     if (status === 'COMPLETED') {
-      completedExpectedTime += expectedTime;
+      completedExpectedTime += Number(expectedTime);
     }
   });
 
@@ -90,11 +90,11 @@ export const calculateStatusTime = (
   const filteredTasks = tasks.filter((task) => task.status === status);
 
   const totalExpectedTime = filteredTasks.reduce(
-    (sum, task) => sum + task.expectedTime,
+    (sum, task) => sum + Number(task.expectedTime),
     0
   );
   const totalActualTime = filteredTasks.reduce(
-    (sum, task) => sum + (task.actualTime || 0),
+    (sum, task) => sum + (task.actualTime ? Number(task.actualTime) : 0),
     0
   );
 
