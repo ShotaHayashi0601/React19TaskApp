@@ -1,41 +1,24 @@
 import CustomModal from '@/components/atoms/CustomModal';
 import { TaskForm, taskFormSchema } from '@/lib/schemas/taskFormSchema';
 import { FC, startTransition, useActionState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Icons } from '@/constants/icons';
-import { Calendar } from '@/components/ui/calendar';
+import { Form } from '@/components/ui/form';
 import { cn } from '@/lib/utils';
 import { Task, TaskStatus } from '@/types';
 import { useUser } from '@clerk/clerk-react';
 import { FormAction, formActions } from '@/types/form-action';
 import { handleAdd, handleUpdate } from '../../services/taskAction';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import WithIconButton from '@/components/atoms/WithIconButton';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { taskStatuses } from '@/constants/task-status';
+  ActualTimeField,
+  DescriptionField,
+  DueDateField,
+  ExpectedTimeField,
+  StatusField,
+  SubmitButtons,
+  TitleField,
+} from './fields';
 
 interface InputTaskFormProps {
   status: TaskStatus;
@@ -74,26 +57,6 @@ function getInitialValues(
     };
   }
 }
-function getActionPropsForButton(action: FormAction) {
-  switch (action) {
-    case formActions.ADD:
-      return { icon: Icons.plus, text: '追加' };
-    case formActions.UPDATE:
-      return {
-        icon: Icons.check,
-        text: '更新',
-      };
-    // case formActions.DELETE:
-    //   return {
-    //     icon: Icons.trash,
-    //     text: '削除',
-    //   };
-    default: {
-      const exhaustiveCheck: never = action;
-      throw new Error(`Unhandled action case: ${exhaustiveCheck}`);
-    }
-  }
-}
 
 const InputTaskForm: FC<InputTaskFormProps> = ({
   status,
@@ -104,8 +67,7 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
 }) => {
   const defaultValues = getInitialValues(action, status, task);
   const token = useAppSelector((state) => state.auth.token);
-  const { icon: buttonIcon, text: buttonText } =
-    getActionPropsForButton(action);
+
   const form = useForm<TaskForm>({
     resolver: zodResolver(taskFormSchema),
     mode: 'onChange',
@@ -140,9 +102,10 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
     defaultValues
   );
 
-  const user = useUser();
-  if (!user?.user?.id) return null;
-  const userId = user.user.id;
+  const { user } = useUser();
+  if (!user?.id) return null;
+  const userId = user.id;
+
   const onSubmit: SubmitHandler<TaskForm> = (data) => {
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
@@ -165,189 +128,17 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
       >
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem className="min-h-[110px]">
-                  <FormLabel className="text-xs">タイトル</FormLabel>
-                  <FormControl>
-                    <Input
-                      className={cn(
-                        'border-blue-400  outline-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-none',
-                        'text-gray-800'
-                      )}
-                      placeholder="タスクのタイトルを入力"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+            <TitleField form={form} />
+            <DescriptionField form={form} />
+            <StatusField form={form} isPending={isPending} />
+            <DueDateField form={form} />
+            <ExpectedTimeField form={form} />
+            <ActualTimeField form={form} />
+            <SubmitButtons
+              isPending={isPending}
+              setOpen={setOpen}
+              action={action}
             />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-xs">内容・説明など</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className={cn(
-                        'h-[100px] resize-none',
-                        'border-blue-400  outline-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-none',
-                        'text-gray-800'
-                      )}
-                      placeholder="詳細を入力"
-                      {...field}
-                    />
-                  </FormControl>
-                  <div className="h-[30px] mb-[40px]">
-                    <FormMessage />
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              disabled={isPending}
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem className="min-h-[110px]">
-                  <FormLabel className="text-xs">ステータス</FormLabel>
-                  <Select
-                    disabled={isPending}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl
-                      className={cn(
-                        'border-blue-400  outline-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-none',
-                        'text-gray-800 h-10'
-                      )}
-                    >
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="ステータスを選択"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {taskStatuses.map((status) => (
-                        <SelectItem key={status.id} value={status.id}>
-                          {status.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Controller
-              control={form.control}
-              name="dueDate"
-              render={({ field }) => (
-                <FormItem className="flex flex-col min-h-[90px]">
-                  <FormLabel className="text-xs">期限</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <button
-                          type="button"
-                          className={cn(
-                            'w-full px-3 py-2 border rounded-md bg-white text-left flex items-center justify-between',
-                            'border-blue-400  outline-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-none'
-                          )}
-                        >
-                          {field.value
-                            ? format(field.value, 'yyyy/MM/dd')
-                            : '期限日を選択'}
-                          <Icons.calendar className="w-5 h-5 text-gray-500" />
-                        </button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={(date) => field.onChange(date)}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="expectedTime"
-              render={({ field }) => (
-                <FormItem className="min-h-[100px]">
-                  <FormLabel className="text-xs">予定作業時間 (分)</FormLabel>
-                  <FormControl>
-                    <Input
-                      className={cn(
-                        'border-blue-400  outline-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-none',
-                        'text-gray-800'
-                      )}
-                      type="number"
-                      placeholder="予定時間を入力"
-                      {...field}
-                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                      onFocus={(e) => field.onChange(e.target.valueAsNumber)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="actualTime"
-              render={({ field }) => (
-                <FormItem className="min-h-[100px]">
-                  <FormLabel className="text-xs">実績作業時間 (分)</FormLabel>
-                  <FormControl>
-                    <Input
-                      className={cn(
-                        'border-blue-400  outline-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-none',
-                        'text-gray-800'
-                      )}
-                      type="number"
-                      placeholder="実績時間を入力"
-                      {...field}
-                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="mx-auto flex justify-center items-center gap-4">
-              <div className="w-[120px]">
-                <WithIconButton
-                  text={buttonText}
-                  type="submit"
-                  disabled={isPending}
-                  icon={buttonIcon}
-                />
-              </div>
-              {formActions.UPDATE === action && (
-                <div className="w-[120px]">
-                  <WithIconButton
-                    text={'キャンセル'}
-                    type="button"
-                    disabled={isPending}
-                    icon={undefined}
-                    onClick={() => setOpen(false)}
-                  />
-                </div>
-              )}
-            </div>
           </form>
         </Form>
       </div>

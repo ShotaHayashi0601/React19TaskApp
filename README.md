@@ -8,7 +8,7 @@ React19、Clerk+Hono、Prisam+Supabase の学習のために作成しました�
 ## 🚀 アプリの紹介
 
 ![タスク管理アプリスクリーンショット](client/public/images/readme/title2.png)
-
+[![タスク完了アニメーション](https://img.youtube.com/vi/oGhOLMmW-e4/0.jpg)](https://www.youtube.com/watch?v=oGhOLMmW-e4)
 デモページ: [React19TaskApp を試す](https://react19-task-app-client.vercel.app/)
 説明資料： [GoogleSlide を開く](https://docs.google.com/presentation/d/1qkqk8Rfvsz4jDaKrkNyvebYhixklNKejIz509w7UMcA/edit?usp=sharing)
 
@@ -18,11 +18,12 @@ React19、Clerk+Hono、Prisam+Supabase の学習のために作成しました�
 
 - 🔐 ユーザ認証（サインアップ・ログイン・ログアウト機能）
 - ✅ タスクの追加・編集・削除
+- 🧩 DND によるステータスの変更
+- 💡 データベースに保存
 - 📅 タスクの期限設定
-- 🏷️ タグ付け機能
 - 🔍 タスクの検索・フィルタリング
 - 📈 完了タスクの進捗率表示
-- 💡 データベースに保存
+- 🎉 タスク完了時のアニメーション
 
 ---
 

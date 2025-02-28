@@ -14,8 +14,8 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
       <div className={cn(`mb-[${HEADER_HEIGHT}px]`)}>
         <LayoutHeader />
       </div>
-      <Outlet /> {/* ルートの子要素をここにレンダリング */}
-      {children} {/* 他のネストされた要素を表示 */}
+      <Outlet />
+      {children}
     </div>
   );
 };

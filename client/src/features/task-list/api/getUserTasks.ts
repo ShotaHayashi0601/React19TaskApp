@@ -11,7 +11,7 @@ export const getUserTasks = async (token: string) => {
     const response = await fetch(`${API_BASE_URL}/tasks`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${token}`, // 🔑 トークンをヘッダーにセット
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });

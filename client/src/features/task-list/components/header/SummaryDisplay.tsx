@@ -1,8 +1,9 @@
 import { Task } from '@/types';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { calculateTaskSummary } from '../../utils/taskSummary';
 import { cn } from '@/lib/utils';
 import ReactConfetti from 'react-confetti';
+import useConfetti from '../../hooks/useConfetti';
 type SummaryDisplayProps = {
   optimisticTasks: Task[];
 };
@@ -16,19 +17,8 @@ function isOver(actualTime: string, expectedTime: string): boolean {
 
 const SummaryDisplay: FC<SummaryDisplayProps> = ({ optimisticTasks }) => {
   const summary = calculateTaskSummary(optimisticTasks);
-  const [showConfetti, setShowConfetti] = useState(false);
-  useEffect(() => {
-    let timerId: NodeJS.Timeout;
-    if (summary.progress >= 100) {
-      setShowConfetti(true);
-      timerId = setTimeout(() => {
-        setShowConfetti(false);
-      }, 60000);
-    } else {
-      setShowConfetti(false);
-    }
-    return () => clearTimeout(timerId);
-  }, [summary.progress]);
+  const showConfetti = useConfetti(summary.progress >= 100);
+
   return (
     <>
       {showConfetti && (
@@ -37,13 +27,6 @@ const SummaryDisplay: FC<SummaryDisplayProps> = ({ optimisticTasks }) => {
           height={window.innerHeight}
           numberOfPieces={500}
           recycle={false}
-          //   colors={[
-          //     '#00BCD4', // ターコイズブルー
-          //     '#1E88E5', // ブライトブルー
-          //     '#40E0D0', // ターコイズ
-          //     '#4FC3F7', // ライトブルー
-          //     '#B2EBF2', // パステルターコイズ
-          //   ]}
           opacity={1}
           gravity={0.3}
           initialVelocityY={50}
@@ -54,7 +37,7 @@ const SummaryDisplay: FC<SummaryDisplayProps> = ({ optimisticTasks }) => {
             h: 0,
           }}
           tweenDuration={3000}
-          //   onConfettiComplete={() => confettiComplete()}
+          // onConfettiComplete={() => confettiComplete()}
         />
       )}
       <div className="flex items-center space-x-4">

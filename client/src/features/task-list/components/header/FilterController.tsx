@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import React, { FC, startTransition } from 'react';
+import { FC, startTransition } from 'react';
 import {
   Select,
   SelectContent,
@@ -67,7 +67,7 @@ const FilterController: FC<FilteredControllerProps> = (props) => {
           </SelectTrigger>
           <SelectContent>
             {sortMenuList.map((menu) => (
-              <SelectItem key={menu.id} value={menu.id} className="">
+              <SelectItem key={menu.id} value={menu.id}>
                 {menu.name}
               </SelectItem>
             ))}
