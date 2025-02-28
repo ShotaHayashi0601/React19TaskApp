@@ -9,7 +9,7 @@ React19、Clerk+Hono、Prisam+Supabase の学習のために作成しました�
 
 ![タスク管理アプリスクリーンショット](client/public/images/readme/title2.png)
 
-[![タスク完了アニメーション](https://img.youtube.com/vi/oGhOLMmW-e4/0.jpg)](https://www.youtube.com/watch?v=oGhOLMmW-e4)
+[![タスク完了アニメーション](client/public/images/readme/title2.png)](https://www.youtube.com/watch?v=oGhOLMmW-e4)
 
 デモページ: [React19TaskApp を試す](https://react19-task-app-client.vercel.app/)
 
