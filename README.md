@@ -9,9 +9,17 @@ React19、Clerk+Hono、Prisam+Supabase の学習のために作成しました�
 
 [![タスク完了アニメーション](client/public/images/readme/title.png)](https://www.youtube.com/watch?v=oGhOLMmW-e4)
 
-デモページ: [React19TaskApp を試す](https://react19-task-app-client.vercel.app/)
+デモ: [React19TaskApp を試す](https://react19-task-app-client.vercel.app/)
 
 説明資料： [GoogleSlide を開く](https://docs.google.com/presentation/d/1qkqk8Rfvsz4jDaKrkNyvebYhixklNKejIz509w7UMcA/edit?usp=sharing)
+
+---
+
+## 🏗️ アーキテクチャ
+
+アプリのアーキテクチャ図はこちらです。
+
+![アーキテクチャ図][(client/public/images/readme/architecture.png)](https://drive.google.com/file/d/19JtaahmuM0HnjqjOPhPWzF1LCISdDQZ5/view?usp=sharing)
 
 ---
 
@@ -128,4 +136,4 @@ server/.env
 
 ---
 
-✨ **このタスク管理アプリがあなたの学習の参考になることを祈っています！**
+✨ **このタスク管理アプリがあなたの学習の糧になることを祈っています！**
