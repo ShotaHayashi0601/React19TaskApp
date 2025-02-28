@@ -92,9 +92,10 @@ const Columns: FC<ColumnProps> = memo(
         // カラム末尾に挿入するイメージで order を再計算する
         const maxOrderInTarget = Math.max(
           1,
-          taskInRedux.filter((t) => t.status === targetStatus).length
+          taskInRedux.filter((t) => t.status === targetStatus).length + 1
           // .map((t) => t.order)
         );
+        console.log('maxOrderInTarget', maxOrderInTarget);
         // const maxOrderInTarget = optimisticTasks.length;
         const newTasks = taskInRedux.map((t) => {
           if (t.id === activeTaskId) {
@@ -129,7 +130,7 @@ const Columns: FC<ColumnProps> = memo(
           setActiveTask(null);
           return;
         }
-
+        console.log('activeIndex', activeIndex);
         // ドロップ先タスクのステータスを取得し、arrayMoveで順番入れ替え
         const targetStatus = taskInRedux[overIndex].status;
         const updatedTasks = arrayMove(

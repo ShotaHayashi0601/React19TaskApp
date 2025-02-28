@@ -101,10 +101,10 @@ export const handleReorder = async (
     actualTime: Number(task.actualTime),
     expectedTime: Number(task.expectedTime),
   }));
-
+  const sortedTasks = convertedTasks.sort((a, b) => a.order - b.order);
   // 1. 楽観的UI更新
-  setOptimisticTasks(convertedTasks);
+  setOptimisticTasks(sortedTasks);
 
-  await updateOrdersAndStatuses(convertedTasks, token);
-  dispatch(initializeTask(convertedTasks));
+  await updateOrdersAndStatuses(sortedTasks, token);
+  dispatch(initializeTask(sortedTasks));
 };
