@@ -65,10 +65,13 @@ export const handleUpdate = async (
     updatedAt: formatDateTime(new Date()),
     order: Number(data.order), //todo: orderの値をどうするか
   };
+
   setOptimisticTasks(
     tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
   );
+
   await updateSingleTask(updatedTask, token);
+
   dispatch(updateTask(updatedTask));
 };
 

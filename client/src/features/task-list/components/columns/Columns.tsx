@@ -183,7 +183,12 @@ const Columns: FC<ColumnProps> = memo(
       >
         <section className="flex justify-between gap-5 flex-1 py-3 overflow-x-auto">
           <ErrorBoundary
-            fallback={<ErroFallback status={taskStatus.PENDING} />}
+            fallback={
+              <ErroFallback
+                status={taskStatus.PENDING}
+                optimisticTasks={optimisticTasks}
+              />
+            }
             onReset={() => dispatch(fetchTasks({ token: token }))}
           >
             <Suspense
@@ -208,7 +213,12 @@ const Columns: FC<ColumnProps> = memo(
             </Suspense>
           </ErrorBoundary>
           <ErrorBoundary
-            fallback={<ErroFallback status={taskStatus.IN_PROGRESS} />}
+            fallback={
+              <ErroFallback
+                status={taskStatus.PENDING}
+                optimisticTasks={optimisticTasks}
+              />
+            }
             onReset={() => dispatch(fetchTasks({ token: token }))}
           >
             <Suspense
@@ -233,7 +243,12 @@ const Columns: FC<ColumnProps> = memo(
             </Suspense>
           </ErrorBoundary>
           <ErrorBoundary
-            fallback={<ErroFallback status={taskStatus.COMPLETED} />}
+            fallback={
+              <ErroFallback
+                status={taskStatus.PENDING}
+                optimisticTasks={optimisticTasks}
+              />
+            }
             onReset={() => dispatch(fetchTasks({ token: token }))}
           >
             <Suspense

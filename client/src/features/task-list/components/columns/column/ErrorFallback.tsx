@@ -3,14 +3,15 @@
 import { cn } from '@/lib/utils';
 import TaskHeader from './header/TaskHeader';
 import { FC } from 'react';
-import { TaskStatus } from '@/types';
+import { Task, TaskStatus } from '@/types';
 import { Icons } from '@/constants/icons';
 
 interface ErrorFallbackProps {
   status: TaskStatus;
+  optimisticTasks: Task[];
 }
 
-const ErroFallback: FC<ErrorFallbackProps> = ({ status }) => {
+const ErroFallback: FC<ErrorFallbackProps> = ({ status, optimisticTasks }) => {
   return (
     <div
       className={cn(
@@ -20,7 +21,7 @@ const ErroFallback: FC<ErrorFallbackProps> = ({ status }) => {
         'rounded-md bg-slate-600 flex flex-1 flex-col overflow-auto max-h-[calc(100vh-144px)]'
       )}
     >
-      <TaskHeader status={status} />
+      <TaskHeader status={status} optimisticTasks={optimisticTasks} />
       <div className="flex-1">
         <div className="flex flex-col space-y-4 justify-center items-center h-full">
           <Icons.alert className="w-10 h-10 text-white" />
