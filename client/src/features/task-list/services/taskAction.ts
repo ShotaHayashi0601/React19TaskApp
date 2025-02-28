@@ -105,6 +105,6 @@ export const handleReorder = async (
   // 1. 楽観的UI更新
   setOptimisticTasks(convertedTasks);
 
-  await updateOrdersAndStatuses(updatedTasks, token);
-  dispatch(initializeTask(updatedTasks));
+  await updateOrdersAndStatuses(convertedTasks, token);
+  dispatch(initializeTask(convertedTasks));
 };

@@ -20,6 +20,7 @@ const Column: FC<ColumnProps> = ({
   setOptimisticTasks,
 }) => {
   use(fetchForSkeleton);
+
   // Make column droppable
   const { setNodeRef, isOver } = useDroppable({
     id: `column-${status}`,
