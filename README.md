@@ -19,7 +19,7 @@ React19、Clerk+Hono、Prisam+Supabase の学習のために作成しました�
 
 アプリのアーキテクチャ図はこちらです。
 
-![アーキテクチャ図][(client/public/images/readme/architecture.png)](https://drive.google.com/file/d/19JtaahmuM0HnjqjOPhPWzF1LCISdDQZ5/view?usp=sharing)
+[![アーキテクチャ図](client/public/images/readme/architecture.png)](https://drive.google.com/file/d/19JtaahmuM0HnjqjOPhPWzF1LCISdDQZ5/view?usp=sharing)
 
 ---
 
