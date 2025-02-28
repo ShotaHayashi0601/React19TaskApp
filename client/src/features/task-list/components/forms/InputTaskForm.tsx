@@ -76,8 +76,8 @@ const InputTaskForm: FC<InputTaskFormProps> = ({
   const tasks = useAppSelector((state) => state.task.taskList);
 
   const dispatch = useAppDispatch();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [updatedState, formAction, isPending] = useActionState(
+
+  const [, formAction, isPending] = useActionState(
     async (prevState: TaskForm, formData: FormData) => {
       const data = Object.fromEntries(
         formData.entries()
