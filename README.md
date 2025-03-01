@@ -42,7 +42,7 @@ React19、Clerk+Hono、Prisam+Supabase の学習のために作成しました�
 - バックエンド:Hono、Prisma
 - データベース:Supabase
 - 認証:Clerk
-- スタイリング: Tailwind CSS
+- スタイリング: Tailwind CSS、shadcn/ui
 - 状態管理: ReduxToolKit
 - ビルドツール: Vite
 
