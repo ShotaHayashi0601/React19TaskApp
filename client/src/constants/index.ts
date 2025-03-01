@@ -1,6 +1,7 @@
-import PATHS from './paths';
-export * from './css-params';
 export * from './app-params';
+export * from './columns';
+export * from './css-params';
+export * from './filter-params';
 export * from './images';
-
-export { PATHS };
+export * from './paths';
+export * from './task-status';
