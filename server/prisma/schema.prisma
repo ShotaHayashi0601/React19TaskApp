@@ -45,6 +45,12 @@ model Task {
   @@index([userId, dueDate], name: "task_userId_dueDate_idx")
 }
 
+model HealthCheck {
+  id        String   @id @default(uuid())
+  status    String   @default("OK")
+  checkedAt DateTime @default(now())
+}
+
 enum TaskStatus {
   PENDING
   IN_PROGRESS

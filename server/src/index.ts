@@ -6,6 +6,7 @@ import { clerkMiddleware } from '@hono/clerk-auth';
 import { serve } from '@hono/node-server';
 const app = new Hono().basePath('/api');
 import 'dotenv/config';
+import healthRouter from './presentation/health/healthRouter';
 
 app.use(
   '*',
@@ -27,12 +28,12 @@ app.use(
 
 app.route('/webhooks', webhookRouter);
 app.route('/tasks', taskRouter);
+app.route('/health', healthRouter);
 app.get('/', (c) => {
   return c.text('Hello Hono!');
 });
 // ✅ サーバー起動部分 (Renderに必要)
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-
 serve({
   fetch: app.fetch,
   port: port,
