@@ -1,7 +1,7 @@
 # 📋 React19TaskApp
 
 React19 の Hooks を使用した認証付き DnD タスク管理アプリです。
-React19、Clerk+Hono、Prisam+Supabase の学習のために作成しました。
+React19、Clerk+Hono、Prisma+Supabase の学習のために作成しました。
 
 ---
 
