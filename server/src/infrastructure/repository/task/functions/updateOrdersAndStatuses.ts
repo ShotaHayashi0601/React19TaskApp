@@ -1,5 +1,5 @@
-import { Task } from '@prisma/client';
-import { db } from '../../../../lib/db';
+import { Task } from "@prisma/client";
+import { db } from "../../../../lib/db";
 
 /**
  * ✅ 複数タスクの order と status を一括更新
@@ -10,7 +10,6 @@ export const updateOrdersAndStatuses = async (
   tasks: Task[]
 ): Promise<Task[]> => {
   if (!tasks.length) return [];
-
   try {
     // ✅ Prismaトランザクションを使用してアトミックに処理
     const updatedTasks = await db.$transaction(
@@ -20,6 +19,7 @@ export const updateOrdersAndStatuses = async (
           data: {
             order: task.order,
             status: task.status,
+            actualTime: task.actualTime,
             updatedAt: new Date(), // ✅ 自動で更新
           },
         })
@@ -27,7 +27,7 @@ export const updateOrdersAndStatuses = async (
     );
     return updatedTasks;
   } catch (error) {
-    console.error('❌ 一括更新エラー:', error);
-    throw new Error('タスクの一括更新に失敗しました。');
+    console.error("❌ 一括更新エラー:", error);
+    throw new Error("タスクの一括更新に失敗しました。");
   }
 };

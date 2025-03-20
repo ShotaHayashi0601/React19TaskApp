@@ -1,12 +1,12 @@
-import { Hono } from 'hono';
-import { CreateTaskUseCase } from '../../application/useCase/task/createTaskUseCase';
-import { TaskRepository } from '../../infrastructure/repository/task/taskRepository';
-import { Task } from '@prisma/client';
-import { GetTaskUseCase } from '../../application/useCase/task/getTaskUseCase';
-import { formatDateTime } from '../../utils/formatting';
-import { UpdateTaskUseCase } from '../../application/useCase/task/updateTaskUseCase';
-import { DeleteTaskUseCase } from '../../application/useCase/task/deleteTaskUseCase';
-import { getAuth } from '@hono/clerk-auth';
+import { Hono } from "hono";
+import { CreateTaskUseCase } from "../../application/useCase/task/createTaskUseCase";
+import { TaskRepository } from "../../infrastructure/repository/task/taskRepository";
+import { Task } from "@prisma/client";
+import { GetTaskUseCase } from "../../application/useCase/task/getTaskUseCase";
+import { formatDateTime } from "../../utils/formatting";
+import { UpdateTaskUseCase } from "../../application/useCase/task/updateTaskUseCase";
+import { DeleteTaskUseCase } from "../../application/useCase/task/deleteTaskUseCase";
+import { getAuth } from "@hono/clerk-auth";
 
 const taskRouter = new Hono();
 const createTaskUseCase = new CreateTaskUseCase(new TaskRepository());
@@ -17,12 +17,12 @@ const getTaskUseCase = new GetTaskUseCase(new TaskRepository());
 /**
  * ✅ タスクの新規作成
  */
-taskRouter.post('/', async (c) => {
+taskRouter.post("/", async (c) => {
   try {
     const auth = getAuth(c);
     const userId = auth?.userId;
     if (!userId) {
-      return c.json({ success: false, message: '認証情報が不正です。' }, 403);
+      return c.json({ success: false, message: "認証情報が不正です。" }, 403);
     }
     const rowTask = await c.req.json();
     const task: Task = {
@@ -48,12 +48,11 @@ taskRouter.post('/', async (c) => {
 /**
  * ✅ タスクの単一更新
  */
-taskRouter.put('/', async (c) => {
+taskRouter.put("/", async (c) => {
   const auth = getAuth(c);
   const userId = auth?.userId;
   if (!userId) {
-    console.log('認証情報が不正です');
-    return c.json({ success: false, message: '認証情報が不正です。' }, 403);
+    return c.json({ success: false, message: "認証情報が不正です。" }, 403);
   }
   try {
     const rowTask = await c.req.json();
@@ -81,17 +80,17 @@ taskRouter.put('/', async (c) => {
 /**
  * 🆕 ✅ 複数タスクの order と status を一括更新
  */
-taskRouter.put('/bulk-update-order-status', async (c) => {
+taskRouter.put("/bulk-update-order-status", async (c) => {
   try {
     const auth = getAuth(c);
     const userId = auth?.userId;
     if (!userId) {
-      return c.json({ success: false, message: '認証情報が不正です。' }, 403);
+      return c.json({ success: false, message: "認証情報が不正です。" }, 403);
     }
     const tasks: Task[] = await c.req.json();
     if (!Array.isArray(tasks)) {
       return c.json(
-        { success: false, message: '配列形式でタスクを送信してください。' },
+        { success: false, message: "配列形式でタスクを送信してください。" },
         400
       );
     }
@@ -99,20 +98,20 @@ taskRouter.put('/bulk-update-order-status', async (c) => {
     const updatedTasks = await updateTaskUseCase.updateOrdersAndStatuses(tasks);
     return c.json({ success: true, data: updatedTasks });
   } catch (error) {
-    console.error('一括更新エラー:', error);
-    return c.json({ success: false, message: '一括更新に失敗しました。' }, 400);
+    console.error("一括更新エラー:", error);
+    return c.json({ success: false, message: "一括更新に失敗しました。" }, 400);
   }
 });
 
 /**
  * ✅ ユーザー単位のタスク取得
  */
-taskRouter.get('/', async (c) => {
+taskRouter.get("/", async (c) => {
   try {
     const auth = getAuth(c);
     const userId = auth?.userId;
     if (!userId) {
-      return c.json({ success: false, message: '認証情報が不正です。' }, 403);
+      return c.json({ success: false, message: "認証情報が不正です。" }, 403);
     }
     const tasks = await getTaskUseCase.findByUserId(userId);
     const taskList = tasks.map((task) => ({
@@ -129,14 +128,14 @@ taskRouter.get('/', async (c) => {
 /**
  * ✅ タスクの削除
  */
-taskRouter.delete('/:taskId', async (c) => {
+taskRouter.delete("/:taskId", async (c) => {
   try {
     const auth = getAuth(c);
     const userId = auth?.userId;
     if (!userId) {
-      return c.json({ success: false, message: '認証情報が不正です。' }, 403);
+      return c.json({ success: false, message: "認証情報が不正です。" }, 403);
     }
-    const taskId = c.req.param('taskId');
+    const taskId = c.req.param("taskId");
     await deleteTaskUseCase.deleteOne(taskId);
     return c.json({ success: true });
   } catch (error) {

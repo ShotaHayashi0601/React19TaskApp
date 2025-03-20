@@ -1,7 +1,7 @@
 {
   "name": "server",
   "scripts": {
-    "dev": "ts-node src/index.ts",
+    "dev": "nodemon --ext ts --exec ts-node src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
@@ -21,6 +21,7 @@
     "@types/bun": "latest",
     "@types/date-fns": "^2.5.3",
     "@types/node": "^22.13.5",
+    "nodemon": "^3.1.9",
     "svix": "^1.45.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"

@@ -1,18 +1,19 @@
-import { TaskForm } from '@/lib/schemas/taskFormSchema';
-import { Task } from '@/types';
-import { addSingleTask } from '../api/addSingleTask';
-import { AppDispatch } from '@/redux/store';
+import { TaskForm } from "@/lib/schemas/taskFormSchema";
+import { Task } from "@/types";
+import { addSingleTask } from "../api/addSingleTask";
+import { AppDispatch } from "@/redux/store";
 import {
   addTask,
   deleteTask,
   initializeTask,
   updateTask,
-} from '@/redux/slices/taskSlice';
-import { formatDate, formatDateTime } from '@/utils';
-import { v4 as uuidv4 } from 'uuid';
-import { updateSingleTask } from '../api/updateSingleTask';
-import { deleteSingleTask } from '../api/deleteSingleTask';
-import { updateOrdersAndStatuses } from '../api/updateOrdersAndStatuses';
+} from "@/redux/slices/taskSlice";
+import { formatDate, formatDateTime } from "@/utils";
+import { v4 as uuidv4 } from "uuid";
+import { updateSingleTask } from "../api/updateSingleTask";
+import { deleteSingleTask } from "../api/deleteSingleTask";
+import { updateOrdersAndStatuses } from "../api/updateOrdersAndStatuses";
+import { getPresetActualTime } from "./helper";
 
 export const handleAdd = async (
   data: TaskForm,
@@ -30,7 +31,11 @@ export const handleAdd = async (
     title: data.title,
     status: data.status,
     description: data.description,
-    actualTime: data.actualTime,
+    actualTime: getPresetActualTime(
+      data.status,
+      Number(data.actualTime),
+      Number(data.expectedTime)
+    ),
     expectedTime: data.expectedTime,
     dueDate: formatDate(data.dueDate),
     createdAt: formatDateTime(new Date()),
@@ -58,7 +63,11 @@ export const handleUpdate = async (
     status: data.status,
     description: data.description,
 
-    actualTime: Number(data.actualTime),
+    actualTime: getPresetActualTime(
+      data.status,
+      Number(data.actualTime),
+      Number(data.expectedTime)
+    ),
     expectedTime: Number(data.expectedTime),
     dueDate: formatDate(data.dueDate),
     createdAt: formatDateTime(new Date()),
@@ -98,7 +107,11 @@ export const handleReorder = async (
   const convertedTasks = updatedTasks.map((task) => ({
     ...task,
     order: Number(task.order),
-    actualTime: Number(task.actualTime),
+    actualTime: getPresetActualTime(
+      task.status,
+      Number(task.actualTime),
+      Number(task.expectedTime)
+    ),
     expectedTime: Number(task.expectedTime),
   }));
   const sortedTasks = convertedTasks.sort((a, b) => a.order - b.order);
