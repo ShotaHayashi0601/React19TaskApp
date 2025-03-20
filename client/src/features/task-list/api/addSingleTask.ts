@@ -13,5 +13,6 @@ export const addSingleTask = async (task: TaskPostData, token: string) => {
     });
   } catch (error) {
     console.error(error);
+    alert("タスクの登録に失敗しました。もう一度試してください");
   }
 };

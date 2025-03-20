@@ -1,4 +1,4 @@
-import { Task } from '@/types';
+import { Task } from "@/types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -9,21 +9,21 @@ export const getUserTasks = async (token: string) => {
     }
 
     const response = await fetch(`${API_BASE_URL}/tasks`, {
-      method: 'GET',
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error('タスクの取得に失敗しました');
+      throw new Error("タスクの取得に失敗しました");
     }
 
     const { data }: { data: Task[] } = await response.json();
     return data;
   } catch (e) {
-    console.error('Error fetching tasks:', e);
-    throw e;
+    console.error("Error fetching tasks:", e);
+    alert("タスクの取得に失敗しました。もう一度試してください");
   }
 };
