@@ -1,6 +1,6 @@
-import { getUserTasks } from '@/features/task-list/api/getUserTasks';
-import { Task } from '@/types';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getUserTasks } from "@/features/task-list/api/getUserTasks";
+import { Task } from "@/types";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface TaskState {
   taskList: Task[];
@@ -16,7 +16,7 @@ const initialState: TaskState = {
 
 //非同期処理の定義
 export const fetchTasks = createAsyncThunk(
-  'task/fetchTasks',
+  "task/fetchTasks",
   async ({ token }: { token: string }) => {
     const tasks = await getUserTasks(token);
     return tasks;
@@ -24,7 +24,7 @@ export const fetchTasks = createAsyncThunk(
 );
 
 const taskSlice = createSlice({
-  name: 'task',
+  name: "task",
   initialState,
   reducers: {
     initializeTask: (state, action: PayloadAction<Task[]>) => {
@@ -57,13 +57,16 @@ const taskSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchTasks.fulfilled, (state, action: PayloadAction<Task[]>) => {
-        state.taskList = action.payload;
-        state.loading = false;
-      })
+      .addCase(
+        fetchTasks.fulfilled,
+        (state, action: PayloadAction<Task[] | undefined>) => {
+          state.taskList = action.payload ?? [];
+          state.loading = false;
+        }
+      )
       .addCase(fetchTasks.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'タスクの取得に失敗しました';
+        state.error = action.error.message || "タスクの取得に失敗しました";
       });
   },
 });
