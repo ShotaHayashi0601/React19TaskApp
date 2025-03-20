@@ -6,16 +6,16 @@ import {
   useEffect,
   useMemo,
   useState,
-} from 'react';
-import Column from './column/Column';
-import CardSkeleton from '@/components/atoms/CardSkeleton';
-import { cn } from '@/lib/utils';
+} from "react";
+import Column from "./column/Column";
+import CardSkeleton from "@/components/atoms/CardSkeleton";
+import { cn } from "@/lib/utils";
 
-import { getUserTasks } from '../../api/getUserTasks';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { taskStatus } from '@/constants/task-status';
-import { ErrorBoundary } from 'react-error-boundary';
-import ErroFallback from './column/ErrorFallback';
+import { getUserTasks } from "../../api/getUserTasks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { taskStatus } from "@/constants/task-status";
+import { ErrorBoundary } from "react-error-boundary";
+import ErroFallback from "./column/ErrorFallback";
 
 import {
   DndContext,
@@ -25,13 +25,13 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
-import { Task, TaskStatus } from '@/types';
-import TaskCard from './column/card/TaskCard';
-import { updateTaskOrdersAndStatus } from '../../lib/dndUtils';
-import { handleReorder } from '../../services/taskAction';
-import { fetchTasks } from '../../../../redux/slices/taskSlice';
+} from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
+import { Task, TaskStatus } from "@/types";
+import TaskCard from "./column/card/TaskCard";
+import { updateTaskOrdersAndStatus } from "../../lib/dndUtils";
+import { handleReorder } from "../../services/taskAction";
+import { fetchTasks } from "../../../../redux/slices/taskSlice";
 type ColumnProps = {
   optimisticTasks: Task[];
   setOptimisticTasks: (tasks: Task[]) => void;
@@ -87,7 +87,7 @@ const Columns: FC<ColumnProps> = memo(
       const overData = over.data.current;
 
       // ▼ カラム上にドロップされた場合
-      if (overData?.type === 'column') {
+      if (overData?.type === "column") {
         const targetStatus = overData.status as TaskStatus;
         // カラム末尾に挿入するイメージで order を再計算する
         const maxOrderInTarget = Math.max(
@@ -194,9 +194,9 @@ const Columns: FC<ColumnProps> = memo(
               fallback={
                 <div
                   className={cn(
-                    'min-w-[600px]',
-                    'shadow-[0px_2px_1px_-1px_rgba(0,0,0,0.2),_0px_1px_1px_0px_rgba(0,0,0,0.14),_0px_1px_3px_0px_rgba(0,0,0,0.12)]',
-                    'rounded-xl bg-slate-600 flex flex-1 flex-col overflow-auto max-h-[calc(100vh-144px)]'
+                    "min-w-[600px]",
+                    "shadow-[0px_2px_1px_-1px_rgba(0,0,0,0.2),_0px_1px_1px_0px_rgba(0,0,0,0.14),_0px_1px_3px_0px_rgba(0,0,0,0.12)]",
+                    "rounded-xl bg-slate-600 flex flex-1 flex-col overflow-auto max-h-[calc(100vh-144px)]"
                   )}
                 >
                   <CardSkeleton height="100vh" />
@@ -224,9 +224,9 @@ const Columns: FC<ColumnProps> = memo(
               fallback={
                 <div
                   className={cn(
-                    'min-w-[600px]',
-                    'shadow-[0px_2px_1px_-1px_rgba(0,0,0,0.2),_0px_1px_1px_0px_rgba(0,0,0,0.14),_0px_1px_3px_0px_rgba(0,0,0,0.12)]',
-                    'rounded-xl bg-slate-600 flex flex-1 flex-col overflow-auto max-h-[calc(100vh-144px)]'
+                    "min-w-[600px]",
+                    "shadow-[0px_2px_1px_-1px_rgba(0,0,0,0.2),_0px_1px_1px_0px_rgba(0,0,0,0.14),_0px_1px_3px_0px_rgba(0,0,0,0.12)]",
+                    "rounded-xl bg-slate-600 flex flex-1 flex-col overflow-auto max-h-[calc(100vh-144px)]"
                   )}
                 >
                   <CardSkeleton height="100vh" />
@@ -254,9 +254,9 @@ const Columns: FC<ColumnProps> = memo(
               fallback={
                 <div
                   className={cn(
-                    'min-w-[600px]',
-                    'shadow-[0px_2px_1px_-1px_rgba(0,0,0,0.2),_0px_1px_1px_0px_rgba(0,0,0,0.14),_0px_1px_3px_0px_rgba(0,0,0,0.12)]',
-                    'rounded-xl bg-slate-600 flex flex-1 flex-col overflow-auto max-h-[calc(100vh-144px)]'
+                    "min-w-[600px]",
+                    "shadow-[0px_2px_1px_-1px_rgba(0,0,0,0.2),_0px_1px_1px_0px_rgba(0,0,0,0.14),_0px_1px_3px_0px_rgba(0,0,0,0.12)]",
+                    "rounded-xl bg-slate-600 flex flex-1 flex-col overflow-auto max-h-[calc(100vh-144px)]"
                   )}
                 >
                   <CardSkeleton height="100vh" />
